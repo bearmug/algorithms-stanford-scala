@@ -26,11 +26,8 @@ case class Recursive(n: String) {
   }
 
   override def toString: String = n.toString
+}
 
-  override def equals(obj: scala.Any): Boolean = obj match {
-    case Recursive(num) if num == this.n => true
-    case _ => false
-  }
-
-  override def hashCode(): Int = this.n.hashCode
+object Recursive {
+  def multiplyRecursive(s1: String, s2: String): String = (Recursive(s1) * Recursive(s2)).toString
 }
