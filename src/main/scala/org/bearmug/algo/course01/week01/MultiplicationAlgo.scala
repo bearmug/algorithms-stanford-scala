@@ -9,25 +9,28 @@ case class Recursive(n: String) {
     case _ => Recursive(n + ("0" * power))
   }
 
-  def *(other: Recursive): Recursive = (this.n, other.n) match {
-    case (aR, bR) if aR.length > bR.length => other * this
+  def multiply(other: Recursive)(f: (String, String, String, String, Int) => Recursive): Recursive = (this.n, other.n) match {
+    case (aR, bR) if aR.length > bR.length => other.multiply(this)(f)
     case ("", _) => Recursive("0")
     case (aR, bR) if aR.length == 1 => Recursive((aR.toInt * bR.toInt).toString)
     case (aR, bR) =>
       val len = aR.length
       val (a, b) = (aR.substring(0, aR.length - len / 2), aR.substring(aR.length - len / 2))
       val (c, d) = (bR.substring(0, bR.length - len / 2), bR.substring(bR.length - len / 2))
-      val (ac, ad, bc, bd) = (
-        Recursive(a) * Recursive(c),
-        Recursive(a) * Recursive(d),
-        Recursive(b) * Recursive(c),
-        Recursive(b) * Recursive(d))
-      (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
+      f(a, b, c, d, len)
   }
 
   override def toString: String = n.toString
 }
 
 object Recursive {
-  def multiplyRecursive(s1: String, s2: String): String = (Recursive(s1) * Recursive(s2)).toString
+  def multiplyRecursive(s1: String, s2: String): Recursive =
+    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
+      val (ac, ad, bc, bd) = (
+        multiplyRecursive(a, c),
+        multiplyRecursive(a, d),
+        multiplyRecursive(b, c),
+        multiplyRecursive(b, d))
+      (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
+    })
 }
