@@ -44,4 +44,25 @@ object Recursive {
         multiplyKaratsuba((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
       (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
     })
+
+  def parMultiplyRecursive(s1: String, s2: String): Recursive =
+    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
+      val output =
+        Seq((a, c), (a, d), (b, c), (b, d)).par.map(t => parMultiplyRecursive(t._1, t._2)).seq
+      output match {
+        case Seq(ac: Recursive, ad: Recursive, bc: Recursive, bd: Recursive) =>
+          (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
+      }
+    })
+
+  def parMultiplyKaratsuba(s1: String, s2: String): Recursive =
+    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
+      val output =
+        Seq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString)).
+          par.map(t => parMultiplyRecursive(t._1, t._2)).seq
+      output match {
+        case Seq(ac: Recursive, bd: Recursive, abcd: Recursive) =>
+          (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
+      }
+    })
 }
