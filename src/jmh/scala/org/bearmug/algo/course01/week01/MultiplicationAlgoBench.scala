@@ -18,6 +18,9 @@ class MultiplicationAlgoBench {
   @Param(Array("2718281828459045235360287471352662497757247093699959574966967627"))
   var s2: String = ""
 
+  @Param(Array("1", "3", "5"))
+  var par: Int = 0
+
   @Benchmark
   def recursiveMult(): Recursive = Recursive.multiplyRecursive(s1, s2)
 
@@ -25,8 +28,8 @@ class MultiplicationAlgoBench {
   def karatsubaMult(): Recursive = Recursive.multiplyKaratsuba(s1, s2)
 
   @Benchmark
-  def parRecursiveMult(): Recursive = Recursive.parMultiplyRecursive(s1, s2)
+  def parRecursiveMult(): Recursive = Recursive.parMultiplyRecursive(s1, s2, par)
 
   @Benchmark
-  def parKaratsubaMult(): Recursive = Recursive.parMultiplyKaratsuba(s1, s2)
+  def parKaratsubaMult(): Recursive = Recursive.parMultiplyKaratsuba(s1, s2, par)
 }

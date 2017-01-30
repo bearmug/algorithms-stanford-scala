@@ -1,5 +1,7 @@
 package org.bearmug.algo.course01.week01
 
+import scala.collection.parallel.ParSeq
+
 case class Recursive(n: String) {
 
   def +(other: Recursive): Recursive = Recursive((BigInt(this.n) + BigInt(other.n)).toString())
@@ -45,21 +47,22 @@ object Recursive {
       (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
     })
 
-  def parMultiplyRecursive(s1: String, s2: String): Recursive =
+  def parMultiplyRecursive(s1: String, s2: String, threshold: Int): Recursive =
     Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val output =
-        Seq((a, c), (a, d), (b, c), (b, d)).par.map(t => parMultiplyRecursive(t._1, t._2)).seq
+      val seq = if (threshold <= 0) Seq((a, c), (a, d), (b, c), (b, d))
+      else ParSeq((a, c), (a, d), (b, c), (b, d))
+      val output = seq.map(t => parMultiplyRecursive(t._1, t._2, threshold - 1)).seq
       output match {
         case Seq(ac: Recursive, ad: Recursive, bc: Recursive, bd: Recursive) =>
           (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
       }
     })
 
-  def parMultiplyKaratsuba(s1: String, s2: String): Recursive =
+  def parMultiplyKaratsuba(s1: String, s2: String, threshold: Int): Recursive =
     Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val output =
-        Seq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString)).
-          par.map(t => parMultiplyRecursive(t._1, t._2)).seq
+      val seq = if (threshold <= 0) Seq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
+      else ParSeq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
+      val output = seq.map(t => parMultiplyKaratsuba(t._1, t._2, threshold - 1)).seq
       output match {
         case Seq(ac: Recursive, bd: Recursive, abcd: Recursive) =>
           (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
