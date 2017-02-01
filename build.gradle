@@ -38,3 +38,7 @@ jacocoTestReport {
         html.enabled = true
     }
 }
+
+coveralls {
+    coberturaReportPath = "${buildDir}/reports/scoverage/cobertura.xml"
+}
