@@ -28,8 +28,8 @@ class MultiplicationAlgoBench {
   def karatsubaMult(): SNum = SNum.karatsubaSeq(s1, s2)
 
   @Benchmark
-  def parRecursiveMult(): SNum = SNum.parMultiplyRecursive(s1, s2, par)
+  def parRecursiveMult(): SNum = SNum.recursivePar(s1, s2, par)
 
   @Benchmark
-  def parKaratsubaMult(): SNum = SNum.parMultiplyKaratsuba(s1, s2, par)
+  def parKaratsubaMult(): SNum = SNum.karatsubaPar(s1, s2, par)
 }
