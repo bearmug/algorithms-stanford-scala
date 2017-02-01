@@ -1,17 +1,18 @@
 package org.bearmug.algo.course01.week01
 
+import scala.collection.GenSeq
 import scala.collection.parallel.ParSeq
 
-case class Recursive(n: String) {
+case class SNum(n: String) {
 
-  def +(other: Recursive): Recursive = Recursive(BigInt(this.n) + BigInt(other.n))
-  def -(other: Recursive): Recursive = Recursive(BigInt(this.n) - BigInt(other.n))
-  def tenPower(power: Int): Recursive = Recursive(this.n + ("0" * power))
+  def +(other: SNum): SNum = SNum(BigInt(this.n) + BigInt(other.n))
+  def -(other: SNum): SNum = SNum(BigInt(this.n) - BigInt(other.n))
+  def tenPower(power: Int): SNum = SNum(this.n + ("0" * power))
 
-  def multiply(other: String)(f: (String, String, String, String, Int) => Recursive): Recursive = (this.n, other) match {
-    case (aR, bR) if aR.length > bR.length => Recursive(other).multiply(this.n)(f) //- get rid of swap-twins cases
-    case ("", _) => Recursive("0")
-    case (aR, bR) if aR.length == 1 => Recursive(aR.toInt * bR.toInt)
+  def multiply(other: String)(f: (String, String, String, String, Int) => SNum): SNum = (this.n, other) match {
+    case (aR, bR) if aR.length > bR.length => SNum(other).multiply(this.n)(f) //- get rid of swap-twins cases
+    case ("", _) => SNum("0")
+    case (aR, bR) if aR.length == 1 => SNum(aR.toInt * bR.toInt)
     case (aR, bR) =>
       val len = aR.length
       val (a, b) = aR.splitAt(aR.length - len / 2)
@@ -22,32 +23,34 @@ case class Recursive(n: String) {
   override def toString: String = n.toString
 }
 
-object Recursive {
+object SNum {
 
-  def apply(n: BigInt): Recursive = Recursive(n.toString())
+  def apply(n: BigInt): SNum = SNum(n.toString())
 
-  def multiplyRecursive(s1: String, s2: String): Recursive = parMultiplyRecursive(s1, s2, 0)
+  def recursiveSeq(s1: String, s2: String): SNum = parMultiplyRecursive(s1, s2, 0, (s, _) => s)
+  def karatsubaSeq(s1: String, s2: String): SNum = parMultiplyKaratsuba(s1, s2, 0, (s, _) => s)
 
-  def multiplyKaratsuba(s1: String, s2: String): Recursive = parMultiplyKaratsuba(s1, s2, 0)
+  def recursivePar(s1: String, s2: String, parLevels: Int): SNum =
+    parMultiplyRecursive(s1, s2, parLevels, (s, levels) => if (levels <= 0) s else s.par)
+  def karatsubaPar(s1: String, s2: String, parLevels: Int): SNum =
+    parMultiplyKaratsuba(s1, s2, parLevels, (s, levels) => if (levels <= 0) s else s.par)
 
-  def parMultiplyRecursive(s1: String, s2: String, threshold: Int): Recursive =
-    Recursive(s1).multiply(s2)((a, b, c, d, len) => {
-      val seq = if (threshold <= 0) Seq((a, c), (a, d), (b, c), (b, d))
-      else ParSeq((a, c), (a, d), (b, c), (b, d))
-      val output = seq.map(t => parMultiplyRecursive(t._1, t._2, threshold - 1)).seq
-      output match {
-        case Seq(ac: Recursive, ad: Recursive, bc: Recursive, bd: Recursive) =>
+  def parMultiplyRecursive(s1: String, s2: String, levels: Int,
+                           t: (Seq[(String, String)], Int) => GenSeq[(String, String)]): SNum =
+    SNum(s1).multiply(s2)((a, b, c, d, len) => {
+      t(Seq((a, c), (a, d), (b, c), (b, d)), levels).map(tup =>
+        parMultiplyRecursive(tup._1, tup._2, levels - 1, t)).seq match {
+        case Seq(ac: SNum, ad: SNum, bc: SNum, bd: SNum) =>
           (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
       }
     })
 
-  def parMultiplyKaratsuba(s1: String, s2: String, threshold: Int): Recursive =
-    Recursive(s1).multiply(s2)((a, b, c, d, len) => {
-      val seq = if (threshold <= 0) Seq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
-      else ParSeq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
-      val output = seq.map(t => parMultiplyKaratsuba(t._1, t._2, threshold - 1)).seq
-      output match {
-        case Seq(ac: Recursive, bd: Recursive, abcd: Recursive) =>
+  def parMultiplyKaratsuba(s1: String, s2: String, levels: Int,
+                           t: (Seq[(String, String)], Int) => GenSeq[(String, String)]): SNum =
+    SNum(s1).multiply(s2)((a, b, c, d, len) => {
+      t(Seq((a, c), (b, d), ((SNum(a) + SNum(b)).toString, (SNum(c) + SNum(d)).toString)), levels).map(tup =>
+        parMultiplyKaratsuba(tup._1, tup._2, levels - 1, t)).seq match {
+        case Seq(ac: SNum, bd: SNum, abcd: SNum) =>
           (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
       }
     })
