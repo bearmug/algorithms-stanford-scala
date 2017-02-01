@@ -1,70 +1,138 @@
 package org.bearmug.algo.course01.week01
 
-import scala.collection.parallel.ParSeq
+import scala.collection.GenSeq
 
-case class Recursive(n: String) {
+/**
+  * Basic operations implementation class
+  *
+  * @param n decimal representation for the number
+  */
+case class SNum(n: String) {
 
-  def +(other: Recursive): Recursive = Recursive((BigInt(this.n) + BigInt(other.n)).toString())
+  /**
+    * Adding for another SNum instance
+    *
+    * @param other one more SNum instance to add
+    * @return arithmetic sum of two SNum
+    */
+  def +(other: SNum): SNum = SNum(BigInt(this.n) + BigInt(other.n))
 
-  def -(other: Recursive): Recursive = Recursive((BigInt(this.n) - BigInt(other.n)).toString())
+  /**
+    * Subtracting for another SNum instance
+    *
+    * @param other SNum instance to subtract to
+    * @return arithmetic difference of two SNum
+    */
+  def -(other: SNum): SNum = SNum(BigInt(this.n) - BigInt(other.n))
 
-  def tenPower(power: Int): Recursive = power match {
-    case 0 => this
-    case _ => Recursive(n + ("0" * power))
-  }
+  /**
+    * Power of 10 calculation, implemented over simple ''000 .. 0'' string concatenation
+    *
+    * @param power power of 10 to apply
+    * @return SNum instance
+    */
+  def tenPower(power: Int): SNum = SNum(this.n + ("0" * power))
 
-  def multiply(other: Recursive)(f: (String, String, String, String, Int) => Recursive): Recursive = (this.n, other.n) match {
-    case (aR, bR) if aR.length > bR.length => other.multiply(this)(f)
-    case ("", _) => Recursive("0")
-    case (aR, bR) if aR.length == 1 => Recursive((aR.toInt * bR.toInt).toString)
+  /**
+    * Numbers multiplication, agnostic to used recursive or Karatsuba approach
+    *
+    * @param other another SNum to multiply
+    * @param f     function to transform (a, b, c, d) components of two numbers to those product.
+    * @return
+    */
+  def multiply(other: String)(f: (String, String, String, String, Int) => SNum): SNum = (this.n, other) match {
+    case (aR, bR) if aR.length > bR.length => SNum(other).multiply(this.n)(f) //- get rid of swap-twins cases
+    case ("", _) => SNum("0")
+    case (aR, bR) if aR.length == 1 => SNum(aR.toInt * bR.toInt)
     case (aR, bR) =>
       val len = aR.length
-      val (a, b) = (aR.substring(0, aR.length - len / 2), aR.substring(aR.length - len / 2))
-      val (c, d) = (bR.substring(0, bR.length - len / 2), bR.substring(bR.length - len / 2))
+      val (a, b) = aR.splitAt(aR.length - len / 2)
+      val (c, d) = bR.splitAt(bR.length - len / 2)
       f(a, b, c, d, len)
   }
 
-  override def toString: String = n.toString
+  /**
+    * Mostly used for development convenience
+    *
+    * @return string representation of SNum
+    */
+  override def toString: String = n.toString //- for debug convenience
 }
 
-object Recursive {
-  def multiplyRecursive(s1: String, s2: String): Recursive =
-    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val (ac, ad, bc, bd) = (
-        multiplyRecursive(a, c),
-        multiplyRecursive(a, d),
-        multiplyRecursive(b, c),
-        multiplyRecursive(b, d))
-      (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
-    })
+/**
+  * Complimentary object to hold apply implementation and multiplication core algo
+  */
+object SNum {
 
-  def multiplyKaratsuba(s1: String, s2: String): Recursive =
-    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val (ac, bd, abcd) = (
-        multiplyKaratsuba(a, c),
-        multiplyKaratsuba(b, d),
-        multiplyKaratsuba((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
-      (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
-    })
+  def apply(n: BigInt): SNum = SNum(n.toString())
 
-  def parMultiplyRecursive(s1: String, s2: String, threshold: Int): Recursive =
-    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val seq = if (threshold <= 0) Seq((a, c), (a, d), (b, c), (b, d))
-      else ParSeq((a, c), (a, d), (b, c), (b, d))
-      val output = seq.map(t => parMultiplyRecursive(t._1, t._2, threshold - 1)).seq
-      output match {
-        case Seq(ac: Recursive, ad: Recursive, bc: Recursive, bd: Recursive) =>
+  /**
+    * Sequential multiplication implementation. It has no parallel forks.
+    *
+    * @param s1 1st number to multiply
+    * @param s2 2nd number to multiply
+    * @return multiplication product
+    */
+  def recursiveSeq(s1: String, s2: String): SNum = multiply(s1, s2, 0,
+    (s, _) => s, //- no parallel transformation
+    (a, b, c, d) => Seq((a, c), (a, d), (b, c), (b, d)))
+
+  /**
+    * Karatsuba sequential multiplication implementation. It has no parallel forks.
+    *
+    * @param s1 1st number to multiply
+    * @param s2 2nd number to multiply
+    * @return multiplication product
+    */
+  def karatsubaSeq(s1: String, s2: String): SNum = multiply(s1, s2, 0,
+    (s, _) => s, //- no parallel transformation
+    (a, b, c, d) => Seq((a, c), (b, d), ((SNum(a) + SNum(b)).toString, (SNum(c) + SNum(d)).toString)))
+
+  /**
+    * Recursive parallel multiplication implementation. It has some parallelization threshold inside.
+    *
+    * @param s1        1st number to multiply
+    * @param s2        2nd number to multiply
+    * @param parLevels fork levels to use parallel calculations
+    * @return multiplication product
+    */
+  def recursivePar(s1: String, s2: String, parLevels: Int): SNum =
+    multiply(s1, s2, parLevels,
+      (s, levels) => if (levels <= 0) s else s.par,
+      (a, b, c, d) => Seq((a, c), (a, d), (b, c), (b, d)))
+
+  /**
+    * Karatsuba parallel multiplication implementation. It has some parallelization threshold inside.
+    *
+    * @param s1        1st number to multiply
+    * @param s2        2nd number to multiply
+    * @param parLevels fork levels to use parallel calculations
+    * @return multiplication product
+    */
+  def karatsubaPar(s1: String, s2: String, parLevels: Int): SNum =
+    multiply(s1, s2, parLevels,
+      (s, levels) => if (levels <= 0) s else s.par,
+      (a, b, c, d) => Seq((a, c), (b, d), ((SNum(a) + SNum(b)).toString, (SNum(c) + SNum(d)).toString)))
+
+  /**
+    * This is very internals of implemented functional. This method could run as recursive or
+    * Karatsuba implementation. It depends on passed functions.
+    * @param s1 1st number to multiply
+    * @param s2 2nd number to multiply
+    * @param levels fork levels to use parallel calculations
+    * @param t function to transform sequence of number pairs to parallel sequence potentially
+    * @param s function to prepare numbers pairs to multiply them with one of the next steps
+    * @return multiplication product
+    */
+  private def multiply(s1: String, s2: String, levels: Int,
+                       t: (Seq[(String, String)], Int) => GenSeq[(String, String)],
+                       s: (String, String, String, String) => Seq[(String, String)]): SNum =
+    SNum(s1).multiply(s2)((a, b, c, d, len) => {
+      t(s(a, b, c, d), levels).map(tup =>
+        multiply(tup._1, tup._2, levels - 1, t, s)).seq match {
+        case Seq(ac: SNum, ad: SNum, bc: SNum, bd: SNum) => //- recursive approach case
           (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
-      }
-    })
-
-  def parMultiplyKaratsuba(s1: String, s2: String, threshold: Int): Recursive =
-    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val seq = if (threshold <= 0) Seq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
-      else ParSeq((a, c), (b, d), ((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
-      val output = seq.map(t => parMultiplyKaratsuba(t._1, t._2, threshold - 1)).seq
-      output match {
-        case Seq(ac: Recursive, bd: Recursive, abcd: Recursive) =>
+        case Seq(ac: SNum, bd: SNum, abcd: SNum) => //- case for Karatsuba algorithm
           (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
       }
     })
