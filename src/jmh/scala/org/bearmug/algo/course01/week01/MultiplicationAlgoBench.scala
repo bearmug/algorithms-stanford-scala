@@ -18,7 +18,7 @@ class MultiplicationAlgoBench {
   @Param(Array("2718281828459045235360287471352662497757247093699959574966967627"))
   var s2: String = ""
 
-  @Param(Array("1", "2", "4"))
+  @Param(Array("3"))
   var par: Int = 0
 
   @Benchmark
