@@ -32,7 +32,9 @@ object SNum {
     (s, _) => s,
     (a, b, c, d) => Seq((a, c), (a, d), (b, c), (b, d)))
 
-  def karatsubaSeq(s1: String, s2: String): SNum = parMultiplyKaratsuba(s1, s2, 0, (s, _) => s)
+  def karatsubaSeq(s1: String, s2: String): SNum = parMultiplyKaratsuba(s1, s2, 0,
+    (s, _) => s,
+    (a, b, c, d) =>Seq((a, c), (b, d), ((SNum(a) + SNum(b)).toString, (SNum(c) + SNum(d)).toString)))
 
   def recursivePar(s1: String, s2: String, parLevels: Int): SNum =
     parMultiplyRecursive(s1, s2, parLevels,
@@ -40,7 +42,9 @@ object SNum {
       (a, b, c, d) => Seq((a, c), (a, d), (b, c), (b, d)))
 
   def karatsubaPar(s1: String, s2: String, parLevels: Int): SNum =
-    parMultiplyKaratsuba(s1, s2, parLevels, (s, levels) => if (levels <= 0) s else s.par)
+    parMultiplyKaratsuba(s1, s2, parLevels,
+      (s, levels) => if (levels <= 0) s else s.par,
+      (a, b, c, d) =>Seq((a, c), (b, d), ((SNum(a) + SNum(b)).toString, (SNum(c) + SNum(d)).toString)))
 
   private def parMultiplyRecursive(s1: String, s2: String, levels: Int,
                                    t: (Seq[(String, String)], Int) => GenSeq[(String, String)],
@@ -54,10 +58,11 @@ object SNum {
     })
 
   private def parMultiplyKaratsuba(s1: String, s2: String, levels: Int,
-                                   t: (Seq[(String, String)], Int) => GenSeq[(String, String)]): SNum =
+                                   t: (Seq[(String, String)], Int) => GenSeq[(String, String)],
+                                   s: (String, String, String, String) => Seq[(String, String)]): SNum =
     SNum(s1).multiply(s2)((a, b, c, d, len) => {
-      t(Seq((a, c), (b, d), ((SNum(a) + SNum(b)).toString, (SNum(c) + SNum(d)).toString)), levels).map(tup =>
-        parMultiplyKaratsuba(tup._1, tup._2, levels - 1, t)).seq match {
+      t(s(a, b, c, d), levels).map(tup =>
+        parMultiplyKaratsuba(tup._1, tup._2, levels - 1, t, s)).seq match {
         case Seq(ac: SNum, bd: SNum, abcd: SNum) =>
           (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
       }
