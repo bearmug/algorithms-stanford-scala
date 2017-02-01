@@ -28,24 +28,9 @@ case class Recursive(n: String) {
 }
 
 object Recursive {
-  def multiplyRecursive(s1: String, s2: String): Recursive =
-    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val (ac, ad, bc, bd) = (
-        multiplyRecursive(a, c),
-        multiplyRecursive(a, d),
-        multiplyRecursive(b, c),
-        multiplyRecursive(b, d))
-      (ac tenPower (len / 2 * 2)) + ((ad + bc) tenPower (len / 2)) + bd
-    })
+  def multiplyRecursive(s1: String, s2: String): Recursive = parMultiplyRecursive(s1, s2, 0)
 
-  def multiplyKaratsuba(s1: String, s2: String): Recursive =
-    Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
-      val (ac, bd, abcd) = (
-        multiplyKaratsuba(a, c),
-        multiplyKaratsuba(b, d),
-        multiplyKaratsuba((Recursive(a) + Recursive(b)).toString, (Recursive(c) + Recursive(d)).toString))
-      (ac tenPower (len / 2 * 2)) + ((abcd - ac - bd) tenPower (len / 2)) + bd
-    })
+  def multiplyKaratsuba(s1: String, s2: String): Recursive = parMultiplyKaratsuba(s1, s2, 0)
 
   def parMultiplyRecursive(s1: String, s2: String, threshold: Int): Recursive =
     Recursive(s1).multiply(Recursive(s2))((a, b, c, d, len) => {
