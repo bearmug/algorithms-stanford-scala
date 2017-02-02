@@ -2,7 +2,7 @@ package org.bearmug.algo.course01.week01
 
 import scala.collection.immutable.Nil
 
-class Merge[T](nums: Seq[T]) {
+class Merge[T](data: Seq[T]) {
 
   def sort(lessEq: (T, T) => Boolean) = {
     def merge(l: List[T], r: List[T]): List[T] = (l, r) match {
@@ -19,10 +19,10 @@ class Merge[T](nums: Seq[T]) {
       }
     }
 
-    sort(nums)
+    sort(data)
   }
 }
 
 object Merge {
-  def apply(nums: Seq[Int]) = new Merge(nums)
+  def apply[T](data: Seq[T]) = new Merge(data)
 }

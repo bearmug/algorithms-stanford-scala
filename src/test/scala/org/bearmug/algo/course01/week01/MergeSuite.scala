@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class MergeSuite extends FunSuite {
   test("sort works for empty input") {
-    assert(Merge(Nil).sort((a, b) => a <= b) == Nil)
+    assert(Merge(Nil).sort((a: Int, b: Int) => a <= b) == Nil)
   }
 
   test("sort works for single element input") {
@@ -42,5 +42,15 @@ class MergeSuite extends FunSuite {
 
   test("sort with reverse order achievable") {
     assert(Merge(List(2, 1, 554, -1, 33, 3)).sort((a, b) => a >= b) == List(554, 33, 3, 2, 1, -1))
+  }
+
+  test("sort works for strings") {
+    assert(Merge(List("asq", "a", "23, ", "yTR")).sort((a, b) => a.compareTo(b) <= 0) ==
+      List("23, ", "a", "asq", "yTR"))
+  }
+
+  test("sort works for characters") {
+    assert(Merge(List('e', 'q', '1', '%')).sort((a, b) => a <= b) ==
+      List('%', '1', 'e', 'q'))
   }
 }
