@@ -2,16 +2,16 @@ package org.bearmug.algo.course01.week01
 
 import scala.collection.immutable.Nil
 
-class Merge(nums: Seq[Int]) {
+class Merge[T](nums: Seq[T]) {
 
-  def sort() = {
-    def merge(l: List[Int], r: List[Int]): List[Int] = (l, r) match {
+  def sort(lessEq: (T, T) => Boolean) = {
+    def merge(l: List[T], r: List[T]): List[T] = (l, r) match {
       case (Nil, _) => r
       case (_, Nil) => l
-      case (lH :: lT, rH :: rT) => if (lH <= rH) lH :: merge(lT, r) else rH :: merge(l, rT)
+      case (lH :: lT, rH :: rT) => if (lessEq(lH, rH)) lH :: merge(lT, r) else rH :: merge(l, rT)
     }
 
-    def sort(seq: Seq[Int]): List[Int] = seq match {
+    def sort(seq: Seq[T]): List[T] = seq match {
       case Nil => Nil
       case s :: Nil => List(s)
       case _ => seq.splitAt(seq.length / 2) match {
