@@ -14,7 +14,13 @@ class Merge[T](data: Seq[T], ord: Ordering[T]) {
     case Nil => Nil
     case s :: Nil => List(s)
     case _ => seq.splitAt(seq.length / 2) match {
-      case (l, r) => merge(sort(l, parLevels - 1), sort(r, parLevels - 1))
+      case (l, r) =>
+        if (parLevels <= 0)
+          merge(sort(l, parLevels - 1), sort(r, parLevels - 1))
+        else
+          Seq(l, r).par.map(sort(_, parLevels - 1)).toList match {
+            case (lRes :: rRes :: Nil) => merge(lRes, rRes)
+          }
     }
   }
 

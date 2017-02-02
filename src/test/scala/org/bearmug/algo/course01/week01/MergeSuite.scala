@@ -53,4 +53,12 @@ class MergeSuite extends FunSuite {
     assert(Merge(List('e', 'q', '1', '%'), Ordering.Char).sort() ==
       List('%', '1', 'e', 'q'))
   }
+
+  test("sort works fine with parallel approach") {
+    assert(Merge(List(2, 1), Ordering.Int).sortPar(4) == List(1, 2))
+    assert(Merge(List(1, 4, 6, 3), Ordering.Int).sortPar(4) == List(1, 3, 4, 6))
+    assert(Merge(List(4, 6, 1, 8, 45, 2, 5, 6), Ordering.Int).sortPar(4) == List(1, 2, 4, 5, 6, 6, 8, 45))
+    assert(Merge(List(4, 6, 1, 34, -1, 5555, 65, 8, 45, 2, 5, 6, 44, 777, 888, 99), Ordering.Int).sortPar(4) ==
+      List(-1, 1, 2, 4, 5, 6, 6, 8, 34, 44, 45, 65, 99, 777, 888, 5555))
+  }
 }
