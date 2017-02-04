@@ -64,7 +64,6 @@ class InversionsSuite extends FunSuite {
   }
 
   test("inversionsPar works for 1000 inversed elements") {
-    val d = 1 to 10000
     assert(Inversions((1 to 1000 reverse).toList).inversionsPar(4) == (1000 / 2) * (1000 - 1))
   }
 }
