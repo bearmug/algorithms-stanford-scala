@@ -59,11 +59,12 @@ class InversionsSuite extends FunSuite {
     assert(Inversions(List(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsPar(4) == (10 / 2) * (10 - 1))
   }
 
-  test("inversionsSimple works for 10 inversed elements") {
-    assert(Inversions(List(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsSimple() == (10 / 2) * (10 - 1))
+  test("inversionsSimple works for 1000 inversed elements") {
+    assert(Inversions((1 to 1000 reverse).toList).inversionsSimple() == (1000 / 2) * (1000 - 1))
   }
 
-  test("inversionsPar works for 10 inversed elements") {
-    assert(Inversions(List(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsPar(4) == (10 / 2) * (10 - 1))
+  test("inversionsPar works for 1000 inversed elements") {
+    val d = 1 to 10000
+    assert(Inversions((1 to 1000 reverse).toList).inversionsPar(4) == (1000 / 2) * (1000 - 1))
   }
 }
