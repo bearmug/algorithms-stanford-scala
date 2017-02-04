@@ -8,62 +8,62 @@ import org.scalatest.junit.JUnitRunner
 class InversionsSuite extends FunSuite {
 
   test("inversionsFast works for empty input") {
-    assert(Inversions(List[Int]()).inversionsFast() == 0)
+    assert(Inversions(Vector[Int]()).inversionsFast() == 0)
   }
 
   test("inversionsFast works for single element") {
-    assert(Inversions(List(1)).inversionsFast() == 0)
+    assert(Inversions(Vector(1)).inversionsFast() == 0)
   }
 
   test("inversionsFast works for non-inversed sequence") {
-    assert(Inversions(List(1, 2, 3, 4, 5, 6)).inversionsFast() == 0)
+    assert(Inversions(Vector(1, 2, 3, 4, 5, 6)).inversionsFast() == 0)
   }
 
   test("inversionsFast works for two inversed elements") {
-    assert(Inversions(List(2, 1)).inversionsFast() == 1)
+    assert(Inversions(Vector(2, 1)).inversionsFast() == 1)
   }
 
   test("inversionsFast failed for of three two inversed elements") {
-    assert(Inversions(List(3, 2, 1)).inversionsFast() != 3)
+    assert(Inversions(Vector(3, 2, 1)).inversionsFast() != 3)
   }
 
   test("inversionsSimple works for empty input") {
-    assert(Inversions(List[Int]()).inversionsSimple() == 0)
+    assert(Inversions(Vector[Int]()).inversionsSimple() == 0)
   }
 
   test("inversionsSimple works for single element") {
-    assert(Inversions(List(1)).inversionsSimple() == 0)
+    assert(Inversions(Vector(1)).inversionsSimple() == 0)
   }
 
   test("inversionsSimple works for sorted sequence") {
-    assert(Inversions(List(1, 2, 3, 4, 5, 6)).inversionsSimple() == 0)
+    assert(Inversions(Vector(1, 2, 3, 4, 5, 6)).inversionsSimple() == 0)
   }
 
   test("inversionsSimple works for two inversed elements") {
-    assert(Inversions(List(2, 1)).inversionsSimple() == 1)
+    assert(Inversions(Vector(2, 1)).inversionsSimple() == 1)
   }
 
   test("inversionsSimple works for of three two inversed elements") {
-    assert(Inversions(List(3, 2, 1)).inversionsSimple() == 3)
+    assert(Inversions(Vector(3, 2, 1)).inversionsSimple() == 3)
   }
 
   test("inversionsSimple works for 6 inversed elements") {
-    assert(Inversions(List(6, 5, 4, 3, 2, 1)).inversionsSimple() == (6 / 2) * (6 - 1))
+    assert(Inversions(Vector(6, 5, 4, 3, 2, 1)).inversionsSimple() == (6 / 2) * (6 - 1))
   }
 
   test("inversionsSimple works for 10 inversed elements") {
-    assert(Inversions(List(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsSimple() == (10 / 2) * (10 - 1))
+    assert(Inversions(Vector(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsSimple() == (10 / 2) * (10 - 1))
   }
 
   test("inversionsPar works for 10 inversed elements") {
-    assert(Inversions(List(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsPar(4) == (10 / 2) * (10 - 1))
+    assert(Inversions(Vector(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsPar(4) == (10 / 2) * (10 - 1))
   }
 
   test("inversionsSimple works for 10000 inversed elements") {
-    assert(Inversions((1 to 10000 reverse).toList).inversionsSimple() == (10000 / 2) * (10000 - 1))
+    assert(Inversions((1 to 10000 reverse).toVector).inversionsSimple() == (10000 / 2) * (10000 - 1))
   }
 
   test("inversionsPar works for 10000 inversed elements") {
-    assert(Inversions((1 to 10000 reverse).toList).inversionsPar(4) == (10000 / 2) * (10000 - 1))
+    assert(Inversions((1 to 10000 reverse).toVector).inversionsPar(4) == (10000 / 2) * (10000 - 1))
   }
 }

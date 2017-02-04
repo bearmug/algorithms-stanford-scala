@@ -22,9 +22,9 @@ class MergeBench {
     nums = Seq.fill(1000)(Random.nextInt(100000))
   }
 
-  @Benchmark
-  def sortPar(): Seq[Int] = Merge(nums, Ordering.Int).sortPar(par)
-
-  @Benchmark
-  def sortSeq(): Seq[Int] = Merge(nums, Ordering.Int).sort()
+//  @Benchmark
+//  def sortPar(): Seq[Int] = Merge(nums, Ordering.Int).sortPar(par)
+//
+//  @Benchmark
+//  def sortSeq(): Seq[Int] = Merge(nums, Ordering.Int).sort()
 }

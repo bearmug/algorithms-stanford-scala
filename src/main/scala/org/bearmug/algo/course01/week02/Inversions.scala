@@ -1,34 +1,29 @@
 package org.bearmug.algo.course01.week02
 
 import scala.annotation.tailrec
-import scala.collection.immutable.Nil
 import scala.collection.parallel.ParSeq
 
-class Inversions(data: List[Int]) {
+class Inversions(data: Vector[Int]) {
 
-  type Inv = (List[Int], Int)
+  type Inv = (Vector[Int], Int)
 
   @tailrec
-  final def merge(l: List[Int], r: List[Int], acc: Int, head: List[Int]): Inv = (l, r) match {
-    case (Nil, _) => (head.reverse ::: r, acc)
-    case (_, Nil) => (head.reverse ::: l, acc)
-    case ((lH :: lT), (rH :: rT)) =>
-      if (lH <= rH) {
-        merge(lT, r, acc, lH :: head)
-      } else {
-        merge(l, rT, acc + l.length, rH :: head)
-      }
+  final def merge(left: Vector[Int], right: Vector[Int], acc: Int, head: Vector[Int]): Inv = (left, right) match {
+    case (Vector(), _) => (head ++ right, acc)
+    case (_, Vector()) => (head ++ left, acc)
+    case (l, r) if l.head <= r.head => merge(l.tail, r, acc, head :+ l.head)
+    case (l, r) => merge(l, r.tail, acc + l.length, head :+ r.head)
   }
 
-  def inversions(seq: Seq[Int], t: Int): Inv = seq match {
-    case Nil => (Nil, 0)
-    case e :: Nil => (List(e), 0)
-    case _ => seq.splitAt(seq.length / 2) match {
+  def inversions(v: Vector[Int], t: Int): Inv = v match {
+    case Vector() => (Vector(), 0)
+    case Vector(e) => (Vector(e), 0)
+    case _ => v.splitAt(v.length / 2) match {
       case (l, r) => {
         val data = if (t <= 0) Seq(l, r) else ParSeq(l, r)
         data.map(inversions(_, t - 1)).seq match {
           case Seq((dataL, accL), (dataR, accR)) =>
-            merge(dataL, dataR, accL + accR, Nil)
+            merge(dataL, dataR, accL + accR, Vector())
         }
       }
     }
@@ -52,5 +47,5 @@ class Inversions(data: List[Int]) {
 }
 
 object Inversions {
-  def apply(data: List[Int]) = new Inversions(data)
+  def apply(data: Vector[Int]) = new Inversions(data)
 }
