@@ -1,6 +1,5 @@
 package org.bearmug.algo.course01.week02
 
-import scala.collection.GenSeq
 import scala.collection.immutable.Nil
 import scala.collection.parallel.ParSeq
 
@@ -27,17 +26,22 @@ class Inversions(data: List[Int]) {
     case _ => seq.splitAt(seq.length / 2) match {
       case (l, r) => {
         val data = if (t <= 0) Seq(l, r) else ParSeq(l, r)
-        data.map(inversions(_, t - 1)).seq match { case Seq((dataL, accL), (dataR, accR)) =>
-          merge(dataL, dataR, accL + accR)
+        data.map(inversions(_, t - 1)).seq match {
+          case Seq((dataL, accL), (dataR, accR)) =>
+            merge(dataL, dataR, accL + accR)
         }
       }
     }
   }
 
-  def inversionsSimple(): Int = inversions(data, 0) match {case (_, inv) => inv}
+  def inversionsSimple(): Int = inversions(data, 0) match {
+    case (_, inv) => inv
+  }
 
   def inversionsPar(parThreshold: Int): Int =
-    inversions(data, parThreshold) match {case (_, inv) => inv}
+    inversions(data, parThreshold) match {
+      case (_, inv) => inv
+    }
 
   /**
     * Invalid approach since we have may not track full solution tree by this
