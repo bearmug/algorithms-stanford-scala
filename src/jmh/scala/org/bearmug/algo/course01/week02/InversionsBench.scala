@@ -4,6 +4,15 @@ import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
 
+/**
+  * Performance report for given input
+  *
+  * Benchmark                        (par)   Mode  Cnt    Score     Error  Units
+  *InversionsBench.inversionsNaive      4  thrpt    5  185.196 ±   2.749  ops/s
+  *InversionsBench.inversionsPar        4  thrpt    5  999.747 ± 120.975  ops/s
+  *InversionsBench.inversionsSeq        4  thrpt    5  892.382 ±  21.273  ops/s
+  *
+  */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 3, timeUnit = TimeUnit.SECONDS)
