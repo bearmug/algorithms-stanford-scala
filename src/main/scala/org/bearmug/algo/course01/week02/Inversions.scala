@@ -1,5 +1,6 @@
 package org.bearmug.algo.course01.week02
 
+import scala.annotation.tailrec
 import scala.collection.immutable.Nil
 import scala.collection.parallel.ParSeq
 
@@ -7,16 +8,15 @@ class Inversions(data: List[Int]) {
 
   type Inv = (List[Int], Int)
 
-  def merge(l: List[Int], r: List[Int], acc: Int): Inv = (l, r) match {
-    case (Nil, _) => (r, acc)
-    case (_, Nil) => (l, acc)
+  @tailrec
+  final def merge(l: List[Int], r: List[Int], acc: Int, head: List[Int]): Inv = (l, r) match {
+    case (Nil, _) => (head.reverse ::: r, acc)
+    case (_, Nil) => (head.reverse ::: l, acc)
     case ((lH :: lT), (rH :: rT)) =>
       if (lH <= rH) {
-        val res = merge(lT, r, acc)
-        (lH :: res._1, res._2)
+        merge(lT, r, acc, lH :: head)
       } else {
-        val res = merge(l, rT, acc + l.length)
-        (rH :: res._1, res._2)
+        merge(l, rT, acc + l.length, rH :: head)
       }
   }
 
@@ -28,7 +28,7 @@ class Inversions(data: List[Int]) {
         val data = if (t <= 0) Seq(l, r) else ParSeq(l, r)
         data.map(inversions(_, t - 1)).seq match {
           case Seq((dataL, accL), (dataR, accR)) =>
-            merge(dataL, dataR, accL + accR)
+            merge(dataL, dataR, accL + accR, Nil)
         }
       }
     }
