@@ -12,7 +12,7 @@ class InversionsBench {
 
   var nums: Vector[Int] = Vector()
 
-  @Param(Array("4"))
+  @Param(Array("2", "4", "8"))
   var par: Int = 0
 
   @Setup

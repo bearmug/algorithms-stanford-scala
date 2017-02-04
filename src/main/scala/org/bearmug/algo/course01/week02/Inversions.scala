@@ -33,10 +33,9 @@ class Inversions(data: Vector[Int]) {
     case (_, inv) => inv
   }
 
-  def inversionsPar(parThreshold: Int): Int =
-    inversions(data, parThreshold) match {
-      case (_, inv) => inv
-    }
+  def inversionsPar(parThreshold: Int): Int = inversions(data, parThreshold) match {
+    case (_, inv) => inv
+  }
 
   /**
     * Invalid approach since we have may not track full solution tree by this
@@ -44,6 +43,20 @@ class Inversions(data: Vector[Int]) {
   def inversionsFast(): Int = data.zipWithIndex.map {
     case (e, index) => (e max index + 1) - (index + 1)
   }.sum
+
+  /**
+    * Naive O(n*n) approach
+    */
+  def inversionsForce(): Int = {
+    def invHead(head: Int, tail: Vector[Int]) = tail.fold(0)((acc, e) => if (e < head) acc + 1 else acc)
+    @tailrec
+    def inv(d: Vector[Int], acc: Int): Int = d match {
+      case Vector() => acc
+      case _ => inv(d.tail, acc + invHead(d.head, d.tail))
+    }
+
+    inv(data, 0)
+  }
 }
 
 object Inversions {
