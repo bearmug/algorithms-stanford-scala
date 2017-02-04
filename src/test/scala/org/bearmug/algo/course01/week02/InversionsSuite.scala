@@ -26,4 +26,28 @@ class InversionsSuite extends FunSuite {
   test("inversionsFast failed for of three two inversed elements") {
     assert(Inversions(List(3, 2, 1)).inversionsFast() != 3)
   }
+
+  test("inversionsSimple works for empty input") {
+    assert(Inversions(List[Int]()).inversionsSimple() == 0)
+  }
+
+  test("inversionsSimple works for single element") {
+    assert(Inversions(List(1)).inversionsSimple() == 0)
+  }
+
+  test("inversionsSimple works for sorted sequence") {
+    assert(Inversions(List(1, 2, 3, 4, 5, 6)).inversionsSimple() == 0)
+  }
+
+  test("inversionsSimple works for two inversed elements") {
+    assert(Inversions(List(2, 1)).inversionsSimple() == 1)
+  }
+
+  test("inversionsSimple works for of three two inversed elements") {
+    assert(Inversions(List(3, 2, 1)).inversionsSimple() == 3)
+  }
+
+  test("inversionsSimple works 6 inversed elements") {
+    assert(Inversions(List(6, 5, 4, 3, 2, 1)).inversionsSimple() == 15)
+  }
 }

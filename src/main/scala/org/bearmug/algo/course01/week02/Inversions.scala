@@ -7,8 +7,8 @@ class Inversions(data: List[Int]) {
   type Inv = (List[Int], Int)
 
   def merge(l: List[Int], r: List[Int], acc: Int): Inv = (l, r) match {
-    case (Nil, _) => (Nil, acc)
-    case (_, Nil) => (Nil, acc)
+    case (Nil, _) => (r, acc)
+    case (_, Nil) => (l, acc)
     case ((lH :: lT), (rH :: rT)) =>
       if (lH <= rH) {
         val res = merge(lT, r, acc)
@@ -21,7 +21,7 @@ class Inversions(data: List[Int]) {
 
   def inversions(seq: Seq[Int]): Inv = seq match {
     case Nil => (Nil, 0)
-    case _ :: Nil => (Nil, 0)
+    case e :: Nil => (List(e), 0)
     case _ => seq.splitAt(seq.length / 2) match {
       case (l, r) => {
         val invL = inversions(l)
