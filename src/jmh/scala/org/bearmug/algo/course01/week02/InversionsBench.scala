@@ -12,12 +12,12 @@ class InversionsBench {
 
   var nums: Vector[Int] = Vector()
 
-  @Param(Array("2", "4", "8"))
+  @Param(Array("4"))
   var par: Int = 0
 
   @Setup
   def setup(): Unit = {
-    nums = (1 to 10000 reverse).toVector
+    nums = (1 to 1000 reverse).toVector
   }
 
   @Benchmark
@@ -25,4 +25,7 @@ class InversionsBench {
 
   @Benchmark
   def inversionsSeq(): Int = Inversions(nums).inversionsSimple()
+
+  @Benchmark
+  def inversionsNaive(): Int = Inversions(nums).inversionsForce()
 }

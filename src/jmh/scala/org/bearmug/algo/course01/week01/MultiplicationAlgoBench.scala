@@ -21,15 +21,15 @@ class MultiplicationAlgoBench {
   @Param(Array("3"))
   var par: Int = 0
 
-//  @Benchmark
-//  def recursiveMult(): SNum = SNum.recursiveSeq(s1, s2)
-//
-//  @Benchmark
-//  def karatsubaMult(): SNum = SNum.karatsubaSeq(s1, s2)
-//
-//  @Benchmark
-//  def parRecursiveMult(): SNum = SNum.recursivePar(s1, s2, par)
-//
-//  @Benchmark
-//  def parKaratsubaMult(): SNum = SNum.karatsubaPar(s1, s2, par)
+  @Benchmark
+  def recursiveMult(): SNum = SNum.recursiveSeq(s1, s2)
+
+  @Benchmark
+  def karatsubaMult(): SNum = SNum.karatsubaSeq(s1, s2)
+
+  @Benchmark
+  def parRecursiveMult(): SNum = SNum.recursivePar(s1, s2, par)
+
+  @Benchmark
+  def parKaratsubaMult(): SNum = SNum.karatsubaPar(s1, s2, par)
 }
