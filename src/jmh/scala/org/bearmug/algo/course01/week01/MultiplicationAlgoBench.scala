@@ -4,8 +4,16 @@ import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
 
-import scala.util.Random
-
+/**
+  * Performance report for given input
+  *
+  * Benchmark                                 (par)                                                              (s1)                                                              (s2)   Mode  Cnt    Score     Error  Units
+  *MultiplicationAlgoBench.karatsubaMult         3  314...592  271...627  thrpt    5  561.377 ± 137.897  ops/s
+  *MultiplicationAlgoBench.parKaratsubaMult      3  314...592  271...627  thrpt    5  881.810 ±  25.142  ops/s
+  *MultiplicationAlgoBench.parRecursiveMult      3  314...592  271...627  thrpt    5  492.557 ±  82.328  ops/s
+  *MultiplicationAlgoBench.recursiveMult         3  314...592  271...627  thrpt    5  330.224 ±   6.759  ops/s
+  *
+  */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 3, timeUnit = TimeUnit.SECONDS)
