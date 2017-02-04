@@ -48,6 +48,10 @@ class InversionsSuite extends FunSuite {
   }
 
   test("inversionsSimple works 6 inversed elements") {
-    assert(Inversions(List(6, 5, 4, 3, 2, 1)).inversionsSimple() == 15)
+    assert(Inversions(List(6, 5, 4, 3, 2, 1)).inversionsSimple() == (6 / 2) * (6 - 1))
+  }
+
+  test("inversionsSimple works 10 inversed elements") {
+    assert(Inversions(List(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)).inversionsSimple() == (10 / 2) * (10 - 1))
   }
 }
