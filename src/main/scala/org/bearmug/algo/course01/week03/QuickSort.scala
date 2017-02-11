@@ -23,10 +23,8 @@ class QuickSort(data: Vector[Int]) {
     data match {
       case (v, l, r) if l + 1 >= r => v
       case (v, l, r) => {
-        var nextLess = l + 1
-        //- next position for element smaller than pivot
-        var nextMore = l + 1
-        //- next position for element bigger than pivot
+        var nextLess = l + 1 //- next position for element smaller than pivot
+        var nextMore = l + 1 //- next position for element bigger than pivot
         var dataInWork = v
         for (i <- l + 1 until r) {
           v(i) match {
@@ -50,6 +48,7 @@ class QuickSort(data: Vector[Int]) {
   private def sort(pivotIndex: (Stripe) => Index): Vector[Int] = sort((data, 0, data.length), pivotIndex)
 
   def sortFirst(): Vector[Int] = sort((s) => s._2)
+  def sortLast(): Vector[Int] = sort((s) => s._3 - 1  )
 }
 
 object QuickSort {
