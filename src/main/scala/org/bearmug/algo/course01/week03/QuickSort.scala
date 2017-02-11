@@ -12,9 +12,10 @@ class QuickSort(data: Vector[Int]) {
     */
   type Stripe = (Vector[Int], Index, Index)
 
-  def swap(data: Stripe, s1: Index, s2: Index): Stripe = data match {
-    case (v, l, r) => {
-      (v.updated(s1, v(s2)).updated(s2, v(s1)), l, r)
+  def swap(data: Stripe): Vector[Int] = data match {
+    case (v, s1, s2) if s1 == s2 => v
+    case (v, s1, s2) => {
+      v.updated(s1, v(s2)).updated(s2, v(s1))
     }
   }
 
@@ -23,19 +24,22 @@ class QuickSort(data: Vector[Int]) {
     case (v, l, r) => {
       var nextLess = l + 1 //- next position for element smaller than pivot
       var nextMore = l + 1 //- next position for element bigger than pivot
+      var dataInWork = v
       for (i <- l + 1 until r) {
         v(i) match {
           case more if more > v(l) => {
             nextMore += 1
           }
-          case lessEq => {
-            swap(data, nextLess, i)
+          case _ => {
+            dataInWork = swap(dataInWork, nextLess, i)
             nextLess += 1
             nextMore += 1
           }
         }
       }
-      swap(data, l, nextLess - 1)._1
+      val presorted = swap(dataInWork, l, nextLess - 1)
+      val sortedLeft = sort((presorted, l, nextLess - 1), pivotIndex)
+      sort((sortedLeft, nextLess, r), pivotIndex)
     }
   }
 
