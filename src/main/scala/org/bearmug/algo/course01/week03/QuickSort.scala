@@ -29,11 +29,11 @@ class QuickSort(data: Vector[Int]) {
     }
 
     @tailrec
-    def compare(data: Data, s: Stripe, i: Index, nextLess: Index, nextMore: Index): (Data, Index) = (s, i) match {
+    def partition(data: Data, s: Stripe, i: Index, nextLess: Index, nextMore: Index): (Data, Index) = (s, i) match {
       case ((_, r), index) if index >= r => (data, nextLess)
       case ((l, r), index) => data(index) match {
-        case more if more > data(l) => compare(data, (l, r), index + 1, nextLess, nextMore + 1)
-        case _ => compare(swap(data, nextLess, index), (l, r), index + 1, nextLess + 1, nextMore + 1)
+        case more if more > data(l) => partition(data, (l, r), index + 1, nextLess, nextMore + 1)
+        case _ => partition(swap(data, nextLess, index), (l, r), index + 1, nextLess + 1, nextMore + 1)
       }
     }
 
@@ -41,12 +41,12 @@ class QuickSort(data: Vector[Int]) {
       case (dt, Nil) => dt
       case (dt, (l, r) :: tail) if l + 1 >= r => sort(dt, tail, pivotIndex)
       case (dt, (l, r) :: tail) => {
-        //- store pivod on left edge
+        //- store pivot on left edge
         val dataInWork = swap(dt, l, pivotIndex(dt, (l, r)))
 
         //- compare and partition range
-        val (res, nextLess) = compare(dataInWork, (l, r), l + 1, l + 1, l + 1)
-        sort(swap(res, l, nextLess - 1), (l, nextLess - 1) :: (nextLess, r) :: tail, pivotIndex)
+        val (res, split) = partition(dataInWork, (l, r), l + 1, l + 1, l + 1)
+        sort(swap(res, l, split - 1), (l, split - 1) :: (split, r) :: tail, pivotIndex)
       }
     }
   }

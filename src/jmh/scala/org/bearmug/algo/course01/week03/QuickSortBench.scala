@@ -8,16 +8,15 @@ import scala.util.Random
 
 /**
   * Benchmark                          Mode  Cnt     Score     Error  Units
-  *QuickSortBench.sortFirst          thrpt    5  1285.516 ± 698.267  ops/s
-  *QuickSortBench.sortFirstReverse   thrpt    5   126.789 ±   2.182  ops/s
-  *QuickSortBench.sortFirstSorted    thrpt    5   496.669 ±   6.544  ops/s
-  *QuickSortBench.sortLast           thrpt    5  1095.141 ±   3.430  ops/s
-  *QuickSortBench.sortLastReverse    thrpt    5   125.246 ±   3.910  ops/s
-  *QuickSortBench.sortLastSorted     thrpt    5   108.963 ±   1.803  ops/s
-  *QuickSortBench.sortMedian         thrpt    5  1004.829 ± 219.598  ops/s
-  *QuickSortBench.sortMedianReverse  thrpt    5   571.772 ±   4.473  ops/s
-  *QuickSortBench.sortMedianSorted   thrpt    5  2198.208 ± 110.531  ops/s
-  *
+  *QuickSortBench.sortFirst          thrpt    5  1276.507 ± 128.870  ops/s
+  *QuickSortBench.sortFirstReverse   thrpt    5   129.192 ±  16.124  ops/s
+  *QuickSortBench.sortFirstSorted    thrpt    5   129.995 ±  21.578  ops/s
+  *QuickSortBench.sortLast           thrpt    5  1228.156 ±  66.801  ops/s
+  *QuickSortBench.sortLastReverse    thrpt    5   117.942 ±  38.500  ops/s
+  *QuickSortBench.sortLastSorted     thrpt    5   122.433 ±   3.591  ops/s
+  *QuickSortBench.sortMedian         thrpt    5  1078.826 ± 269.859  ops/s
+  *QuickSortBench.sortMedianReverse  thrpt    5   434.632 ±  82.597  ops/s
+  *QuickSortBench.sortMedianSorted   thrpt    5  2399.205 ±  21.592  ops/s
   */
 
 @State(Scope.Benchmark)
@@ -39,22 +38,28 @@ class QuickSortBench {
 
   @Benchmark
   def sortMedian(): Vector[Int] = QuickSort(numRandom).sortMedian()
+
   @Benchmark
   def sortMedianSorted(): Vector[Int] = QuickSort(numSorted).sortMedian()
+
   @Benchmark
   def sortMedianReverse(): Vector[Int] = QuickSort(numRevers).sortMedian()
 
   @Benchmark
   def sortFirst(): Vector[Int] = QuickSort(numRandom).sortFirst()
+
   @Benchmark
   def sortFirstSorted(): Vector[Int] = QuickSort(numSorted).sortFirst()
+
   @Benchmark
   def sortFirstReverse(): Vector[Int] = QuickSort(numRevers).sortFirst()
 
   @Benchmark
   def sortLast(): Vector[Int] = QuickSort(numRandom).sortLast()
+
   @Benchmark
   def sortLastSorted(): Vector[Int] = QuickSort(numSorted).sortLast()
+
   @Benchmark
   def sortLastReverse(): Vector[Int] = QuickSort(numRevers).sortLast()
 }
