@@ -15,9 +15,9 @@ class QuickSortSuite extends FunSuite {
   }
 
   test("sortFirst works for two element input") {
+    assert(QuickSort(Vector[Int](2, 1)).sortFirst() == Vector(1, 2))
     assert(QuickSort(Vector[Int](1, 1)).sortFirst() == Vector(1, 1))
     assert(QuickSort(Vector[Int](1, 2)).sortFirst() == Vector(1, 2))
-    assert(QuickSort(Vector[Int](2, 1)).sortFirst() == Vector(1, 2))
   }
 
   test("sortFirst works for three element input") {

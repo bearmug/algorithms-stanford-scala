@@ -28,34 +28,25 @@ class QuickSort(data: Vector[Int]) {
       }
     }
 
+    @tailrec
+    def compare(data: Data, s: Stripe, i: Index, nextLess: Index, nextMore: Index): (Data, Index) = (s, i) match {
+      case ((_, r), index) if index >= r => (data, nextLess)
+      case ((l, r), index) => data(index) match {
+        case more if more > data(l) => compare(data, (l, r), index + 1, nextLess, nextMore + 1)
+        case _ => compare(swap(data, nextLess, index), (l, r), index + 1, nextLess + 1, nextMore + 1)
+      }
+    }
+
     (d, s) match {
       case (dt, Nil) => dt
       case (dt, (l, r) :: tail) if l + 1 >= r => sort(dt, tail, pivotIndex)
       case (dt, (l, r) :: tail) => {
-        var dataInWork = swap(dt, l, pivotIndex(dt, (l, r)))
-        var nextLess = l + 1
-        //- next position for element smaller than pivot
-        var nextMore = l + 1 //- next position for element bigger than pivot
-        for (i <- l + 1 until r) {
-          dataInWork(i) match {
-            case more if more > dataInWork(l) => {
-              nextMore += 1
-            }
-            case _ => {
-              dataInWork = swap(dataInWork, nextLess, i)
-              nextLess += 1
-              nextMore += 1
-            }
-          }
-        }
-        var head = tail
-        if (l < nextLess - 2) {
-          head = (l, nextLess - 1) :: head
-        }
-        if (nextLess < r - 1) {
-          head = (nextLess, r) :: head
-        }
-        sort(swap(dataInWork, l, nextLess - 1), head, pivotIndex)
+        //- store pivod on left edge
+        val dataInWork = swap(dt, l, pivotIndex(dt, (l, r)))
+
+        //- compare and partition range
+        val (res, nextLess) = compare(dataInWork, (l, r), l + 1, l + 1, l + 1)
+        sort(swap(res, l, nextLess - 1), (l, nextLess - 1) :: (nextLess, r) :: tail, pivotIndex)
       }
     }
   }
