@@ -1,5 +1,7 @@
 package org.bearmug.algo.course01.week03
 
+import scala.math.Ordering
+
 class QuickSort(data: Vector[Int]) {
 
   /**
@@ -49,6 +51,14 @@ class QuickSort(data: Vector[Int]) {
 
   def sortFirst(): Vector[Int] = sort((s) => s._2)
   def sortLast(): Vector[Int] = sort((s) => s._3 - 1  )
+  def sortMedian(): Vector[Int] = sort((s) => s match {
+    case (v, l, r) => {
+      val medianIndex = (l + r) / 2
+      Vector((l, v(l)), (r, v(r)), (medianIndex, v(medianIndex))).sortBy(_._2) match {
+        case Vector(_, (idx, _), _) => idx
+      }
+    }
+  })
 }
 
 object QuickSort {

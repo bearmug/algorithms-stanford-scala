@@ -11,16 +11,42 @@ import scala.util.Random
 @Measurement(iterations = 5, time = 3, timeUnit = TimeUnit.SECONDS)
 @Fork(value = 1)
 class QuickSortBench {
-  var nums: Vector[Int] = Vector()
+
+  var numRandom: Vector[Int] = Vector()
+  var numSorted: Vector[Int] = Vector()
+  var numRevers: Vector[Int] = Vector()
 
   @Setup
   def setup(): Unit = {
-    nums = Vector.fill(1000)(Random.nextInt(100000))
+    numRandom = Vector.fill(1000)(Random.nextInt(100000))
+    numSorted = (1 to 1000).toVector
+    numRevers = (1 to 1000).reverse.toVector
   }
 
   @Benchmark
-  def sortFirst(): Vector[Int] = QuickSort(nums).sortFirst()
+  def sortMedian(): Vector[Int] = QuickSort(numRandom).sortMedian()
 
   @Benchmark
-  def sortLast(): Vector[Int] = QuickSort(nums).sortLast()
+  def sortFirst(): Vector[Int] = QuickSort(numRandom).sortFirst()
+
+  @Benchmark
+  def sortLast(): Vector[Int] = QuickSort(numRandom).sortLast()
+
+  @Benchmark
+  def sortMedianSorted(): Vector[Int] = QuickSort(numSorted).sortMedian()
+
+  @Benchmark
+  def sortFirstSorted(): Vector[Int] = QuickSort(numSorted).sortFirst()
+
+  @Benchmark
+  def sortLastSorted(): Vector[Int] = QuickSort(numSorted).sortLast()
+
+  @Benchmark
+  def sortMedianReverse(): Vector[Int] = QuickSort(numRevers).sortMedian()
+
+  @Benchmark
+  def sortFirstReverse(): Vector[Int] = QuickSort(numRevers).sortFirst()
+
+  @Benchmark
+  def sortLastReverse(): Vector[Int] = QuickSort(numRevers).sortLast()
 }
