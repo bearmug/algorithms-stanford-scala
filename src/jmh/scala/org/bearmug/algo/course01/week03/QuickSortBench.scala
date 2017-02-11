@@ -6,6 +6,20 @@ import org.openjdk.jmh.annotations._
 
 import scala.util.Random
 
+/**
+  * Benchmark                          Mode  Cnt     Score     Error  Units
+  *QuickSortBench.sortFirst          thrpt    5  1285.516 ± 698.267  ops/s
+  *QuickSortBench.sortFirstReverse   thrpt    5   126.789 ±   2.182  ops/s
+  *QuickSortBench.sortFirstSorted    thrpt    5   496.669 ±   6.544  ops/s
+  *QuickSortBench.sortLast           thrpt    5  1095.141 ±   3.430  ops/s
+  *QuickSortBench.sortLastReverse    thrpt    5   125.246 ±   3.910  ops/s
+  *QuickSortBench.sortLastSorted     thrpt    5   108.963 ±   1.803  ops/s
+  *QuickSortBench.sortMedian         thrpt    5  1004.829 ± 219.598  ops/s
+  *QuickSortBench.sortMedianReverse  thrpt    5   571.772 ±   4.473  ops/s
+  *QuickSortBench.sortMedianSorted   thrpt    5  2198.208 ± 110.531  ops/s
+  *
+  */
+
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 5, time = 3, timeUnit = TimeUnit.SECONDS)
