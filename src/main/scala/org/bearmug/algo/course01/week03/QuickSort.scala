@@ -23,7 +23,7 @@ class QuickSort(data: Vector[Int]) {
     case (v, l, r) => {
       var nextLess = l + 1 //- next position for element smaller than pivot
       var nextMore = l + 1 //- next position for element bigger than pivot
-      for (i <- l + 1 to r) {
+      for (i <- l + 1 until r) {
         v(i) match {
           case more if more > v(l) => {
             nextMore += 1
