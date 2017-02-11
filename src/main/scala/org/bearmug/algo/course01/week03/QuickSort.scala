@@ -53,7 +53,7 @@ class QuickSort(data: Vector[Int]) {
   def sortLast(): Vector[Int] = sort((s) => s._3 - 1  )
   def sortMedian(): Vector[Int] = sort((s) => s match {
     case (v, l, r) => {
-      val medianIndex = (l + r) / 2
+      val medianIndex = (l + r - 1) / 2
       Vector((l, v(l)), (r - 1, v(r - 1)), (medianIndex, v(medianIndex))).sortBy(_._2) match {
         case Vector(_, (idx, _), _) => idx
       }

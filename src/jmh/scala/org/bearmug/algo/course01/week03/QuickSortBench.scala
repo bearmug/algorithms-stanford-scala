@@ -39,28 +39,22 @@ class QuickSortBench {
 
   @Benchmark
   def sortMedian(): Vector[Int] = QuickSort(numRandom).sortMedian()
-
-  @Benchmark
-  def sortFirst(): Vector[Int] = QuickSort(numRandom).sortFirst()
-
-  @Benchmark
-  def sortLast(): Vector[Int] = QuickSort(numRandom).sortLast()
-
   @Benchmark
   def sortMedianSorted(): Vector[Int] = QuickSort(numSorted).sortMedian()
-
-  @Benchmark
-  def sortFirstSorted(): Vector[Int] = QuickSort(numSorted).sortFirst()
-
-  @Benchmark
-  def sortLastSorted(): Vector[Int] = QuickSort(numSorted).sortLast()
-
   @Benchmark
   def sortMedianReverse(): Vector[Int] = QuickSort(numRevers).sortMedian()
 
   @Benchmark
+  def sortFirst(): Vector[Int] = QuickSort(numRandom).sortFirst()
+  @Benchmark
+  def sortFirstSorted(): Vector[Int] = QuickSort(numSorted).sortFirst()
+  @Benchmark
   def sortFirstReverse(): Vector[Int] = QuickSort(numRevers).sortFirst()
 
+  @Benchmark
+  def sortLast(): Vector[Int] = QuickSort(numRandom).sortLast()
+  @Benchmark
+  def sortLastSorted(): Vector[Int] = QuickSort(numSorted).sortLast()
   @Benchmark
   def sortLastReverse(): Vector[Int] = QuickSort(numRevers).sortLast()
 }
