@@ -40,8 +40,8 @@ class QuickSortSuite extends FunSuite {
   }
 
   test("sortMedian works for 4 element input") {
-    assert(QuickSort(Vector[Int](2, 0, 3, 1)).sortMedian() == Vector(0, 1, 2, 3))
     assert(QuickSort(Vector[Int](3, 1, 2, 0)).sortMedian() == Vector(0, 1, 2, 3))
+    assert(QuickSort(Vector[Int](2, 0, 3, 1)).sortMedian() == Vector(0, 1, 2, 3))
     assert(QuickSort(Vector[Int](3, 0, 1, 2)).sortMedian() == Vector(0, 1, 2, 3))
   }
 

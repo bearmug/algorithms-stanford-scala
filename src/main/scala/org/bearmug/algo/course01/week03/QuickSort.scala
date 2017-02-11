@@ -25,12 +25,12 @@ class QuickSort(data: Vector[Int]) {
     data match {
       case (v, l, r) if l + 1 >= r => v
       case (v, l, r) => {
+        var dataInWork = swap(v, l, pivotIndex(v, l, r))
         var nextLess = l + 1 //- next position for element smaller than pivot
         var nextMore = l + 1 //- next position for element bigger than pivot
-        var dataInWork = v
         for (i <- l + 1 until r) {
-          v(i) match {
-            case more if more > v(l) => {
+          dataInWork(i) match {
+            case more if more > dataInWork(l) => {
               nextMore += 1
             }
             case _ => {
@@ -54,7 +54,7 @@ class QuickSort(data: Vector[Int]) {
   def sortMedian(): Vector[Int] = sort((s) => s match {
     case (v, l, r) => {
       val medianIndex = (l + r) / 2
-      Vector((l, v(l)), (r, v(r)), (medianIndex, v(medianIndex))).sortBy(_._2) match {
+      Vector((l, v(l)), (r - 1, v(r - 1)), (medianIndex, v(medianIndex))).sortBy(_._2) match {
         case Vector(_, (idx, _), _) => idx
       }
     }
