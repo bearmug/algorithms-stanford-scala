@@ -17,8 +17,8 @@ sourceSets {
 }
 
 jmh {
-    include = ['.*']
-    jmhVersion = '1.15'
+    include = '.*course01.*'
+    jmhVersion = '1.17'
 }
 
 dependencies {
