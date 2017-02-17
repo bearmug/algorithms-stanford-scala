@@ -51,4 +51,17 @@ class QuickSortSuite extends FunSuite {
     assert(QuickSort(Vector[Int](4, 0, 1, 6, 5, 9, 3, 2, 7, 8)).sortMedian() ==
       Vector(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
   }
+
+  test("sortFunc works for 4 element input") {
+    assert(QuickSort(Vector[Int](3, 1, 2, 0)).sortFunc() == Vector(0, 1, 2, 3))
+    assert(QuickSort(Vector[Int](2, 0, 3, 1)).sortFunc() == Vector(0, 1, 2, 3))
+    assert(QuickSort(Vector[Int](3, 0, 1, 2)).sortFunc() == Vector(0, 1, 2, 3))
+  }
+
+  test("sortFunc works for ten elements") {
+    assert(QuickSort(Vector[Int](9, 8, 7, 6, 5, 4, 3, 2, 1, 0)).sortFunc() ==
+      Vector(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
+    assert(QuickSort(Vector[Int](4, 0, 1, 6, 5, 9, 3, 2, 7, 8)).sortFunc() ==
+      Vector(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
+  }
 }

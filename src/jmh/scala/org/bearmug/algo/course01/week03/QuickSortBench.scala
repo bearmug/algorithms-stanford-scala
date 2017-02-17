@@ -62,4 +62,13 @@ class QuickSortBench {
 
   @Benchmark
   def sortLastReverse(): Vector[Int] = QuickSort(numRevers).sortLast()
+
+  @Benchmark
+  def sortFunc(): Vector[Int] = QuickSort(numRandom).sortFunc()
+
+  @Benchmark
+  def sortFuncSorted(): Vector[Int] = QuickSort(numSorted).sortFunc()
+
+  @Benchmark
+  def sortFuncReverse(): Vector[Int] = QuickSort(numRevers).sortFunc()
 }

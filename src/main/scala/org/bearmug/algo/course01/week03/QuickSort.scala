@@ -70,6 +70,18 @@ class QuickSort(data: Vector[Int]) {
       }
     }
   })
+
+  def sortFunc(): Vector[Int] = {
+    def sortF(d: Data): Data = d match {
+      case Vector(n) => Vector(n)
+      case Vector() => Vector()
+      case _ => {
+        def p = d(d.length / 2)
+        sortF(d.filter(_ < p)) ++ d.filter(_ == p) ++ sortF(d.filter(_ > p))
+      }
+    }
+    sortF(data)
+  }
 }
 
 object QuickSort {
