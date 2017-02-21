@@ -24,7 +24,7 @@ class Karger(v: List[(Int, List[Int])]) {
   final def calcCut(g: List[Vertex]):Int = g match {
     case Nil => Int.MaxValue
     case _ :: Nil => Int.MaxValue
-    case (i1, n1) :: (i2, n2) :: Nil => n1.count(i2 ==) + n2.count(i1 ==)
+    case (i1, n1) :: (i2, n2) :: Nil => (n1.count(i2 ==) + n2.count(i1 ==)) / 2
     case v1 :: v2 :: tail => calcCut(merge(v1, v2) :: replace(tail, v1, v2, List()))
   }
 
