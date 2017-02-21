@@ -23,7 +23,7 @@ class KargerSuite extends FunSuite {
   }
 
   test("minCut works for cyclic graph") {
-    val l = (0 to 299).map(i => i -> List((i + 1) % 300, (i + 299) % 300)).toMap
+    val l = (0 to 99).map(i => i -> List((i + 1) % 100, (i + 99) % 100)).toMap
     assert(Karger(l).minCut() == 2)
   }
 }

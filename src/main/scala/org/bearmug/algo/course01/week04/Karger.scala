@@ -8,13 +8,14 @@ import scala.util.Random
 
 class Karger(m: Map[Int, List[Int]]) {
 
-  def merge(g: Map[Int, List[Int]], i1: Int, i2: Int): Map[Int, List[Int]] = {
-    val res = g.updated(i2, g(i1).filter(i2 !=) ::: g(i2).filter(i1 !=)) - i1
-    res.map(t => (t._1, t._2.map(v => if (v == i1) i2 else v)))
-  }
+  def minCut(): Int = {
+    def merge(g: Map[Int, List[Int]], i1: Int, i2: Int): Map[Int, List[Int]] = {
+      val res = g.updated(i2, g(i1).filter(i2 !=) ::: g(i2).filter(i1 !=)) - i1
+      res.map(t => (t._1, t._2.map(v => if (v == i1) i2 else v)))
+    }
 
-  @tailrec
-  final def calcCut(g: Map[Int, List[Int]], keys: Vector[Int]):Int = keys match {
+    @tailrec
+    def calcCut(g: Map[Int, List[Int]], keys: Vector[Int]):Int = keys match {
       case Vector() => Int.MaxValue
       case Vector(_) => Int.MaxValue
       case Vector(i1, i2) => (g(i1).count(i2 ==) + g(i2).count(i1 ==)) / 2
@@ -25,10 +26,10 @@ class Karger(m: Map[Int, List[Int]]) {
       }
     }
 
-
-  def minCut(): Int = m match {
-    case m if m.isEmpty => Int.MaxValue
-    case _ => (0 until m.size).map { _ => calcCut(m, m.keys.toVector) } min
+    m match {
+      case m if m.isEmpty => Int.MaxValue
+      case _ => (0 until m.size).map { _ => calcCut(m, m.keys.toVector) } min
+    }
   }
 }
 
