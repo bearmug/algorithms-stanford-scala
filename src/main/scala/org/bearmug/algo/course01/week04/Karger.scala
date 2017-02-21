@@ -6,37 +6,38 @@ import scala.util.Random
 
 
 
-class Karger(v: List[(Int, List[Int])]) {
+class Karger(m: Map[Int, List[Int]]) {
 
-  type Vertex = (Int, List[Int])
-
-  def merge(v1: Vertex, v2: Vertex): Vertex = (v1, v2) match {
-    case ((i1, l1),(i2, l2)) => (i2, l1.filter(i2 !=) ::: l2.filter(i1 !=))
+  def merge(g: Map[Int, List[Int]], i1: Int, i2: Int): Map[Int, List[Int]] = {
+    val res = g.updated(i2, g(i1).filter(i2 !=) ::: g(i2).filter(i1 !=)) - i1
+    res.map(t => (t._1, t._2.map(v => if (v == i1) i2 else v)))
   }
 
   @tailrec
-  final def replace(list: List[Vertex], v1: Vertex, v2: Vertex, res: List[Vertex]): List[Vertex] = list match {
-    case Nil => res
-    case (v, l) :: tail => replace(tail, v1, v2, (v, l.map(i => if (i == v1._1) v2._1 else i)) :: res)
-  }
+  final def calcCut(g: Map[Int, List[Int]], keys: Vector[Int]):Int = keys match {
+      case Vector() => Int.MaxValue
+      case Vector(_) => Int.MaxValue
+      case Vector(i1, i2) => (g(i1).count(i2 ==) + g(i2).count(i1 ==)) / 2
+      case _ => {
+        val i1 = keys(Random.nextInt(keys.size))
+        val i2 = g(i1)(Random.nextInt(g(i1).length))
+        calcCut(merge(g, i1, i2), keys.filter(i1 !=))
+      }
+    }
 
-  @tailrec
-  final def calcCut(g: List[Vertex]):Int = g match {
-    case Nil => Int.MaxValue
-    case _ :: Nil => Int.MaxValue
-    case (i1, n1) :: (i2, n2) :: Nil => (n1.count(i2 ==) + n2.count(i1 ==)) / 2
-    case v1 :: v2 :: tail => calcCut(merge(v1, v2) :: replace(tail, v1, v2, List()))
-  }
 
-  def minCut(): Int = (0 to v.size + 1).map { _ => calcCut(Random.shuffle(v)) } min
+  def minCut(): Int = m match {
+    case m if m.isEmpty => Int.MaxValue
+    case _ => (0 until m.size).map { _ => calcCut(m, m.keys.toVector) } min
+  }
 }
 
 object Karger {
-  def apply(v: List[(Int, List[Int])]): Karger = new Karger(v)
+  def apply(m: Map[Int, List[Int]]): Karger = new Karger(m)
 
   def apply(fileName: String): Karger =
     apply(Source.fromFile(fileName).getLines().map{ _.split("\t").map(_.toInt).toList match {
-      case n :: rest => (n, rest)
-    }}.toList)
+      case n :: rest => n -> rest
+    }}.toMap)
 }
 
