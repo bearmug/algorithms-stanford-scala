@@ -10,8 +10,9 @@ class Karger(m: Map[Int, List[Int]]) {
 
   def minCut(): Int = {
     def merge(g: Map[Int, List[Int]], i1: Int, i2: Int): Map[Int, List[Int]] = {
-      val res = g.updated(i2, g(i1).filter(i2 !=) ::: g(i2).filter(i1 !=)) - i1
-      res.map(t => (t._1, t._2.map(v => if (v == i1) i2 else v)))
+      (g.updated(i2, g(i1).filter(i2 !=) ::: g(i2).filter(i1 !=)) - i1).map {
+        case (i, l) => (i, l.map(v => if (v == i1) i2 else v))
+      }
     }
 
     @tailrec
@@ -27,7 +28,7 @@ class Karger(m: Map[Int, List[Int]]) {
     }
 
     m match {
-      case m if m.isEmpty => Int.MaxValue
+      case e if e.isEmpty => Int.MaxValue
       case _ => (0 until m.size).map { _ => calcCut(m, m.keys.toVector) } min
     }
   }
