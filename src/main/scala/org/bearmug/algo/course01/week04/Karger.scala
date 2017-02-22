@@ -38,7 +38,7 @@ object Karger {
   def apply(m: Map[Int, List[Int]]): Karger = new Karger(m)
 
   def apply(fileName: String): Karger =
-    apply(Source.fromFile(fileName).getLines().map{ _.split("\t").map(_.toInt).toList match {
+    apply(Source.fromURL(getClass.getResource(fileName)).getLines().map{ _.split("\t").map(_.toInt).toList match {
       case n :: rest => n -> rest
     }}.toMap)
 }

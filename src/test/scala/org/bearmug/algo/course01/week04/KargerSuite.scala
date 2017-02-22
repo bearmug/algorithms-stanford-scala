@@ -26,4 +26,8 @@ class KargerSuite extends FunSuite {
     val l = (0 to 99).map(i => i -> List((i + 1) % 100, (i + 99) % 100)).toMap
     assert(Karger(l).minCut() == 2)
   }
+
+  test("minCut works for test file") {
+    assert(Karger("/karger.data").minCut() == 17)
+  }
 }
