@@ -19,7 +19,7 @@ class Karger(m: Map[Int, List[Int]]) {
     def calcCut(g: Map[Int, List[Int]], keys: Vector[Int]):Int = keys match {
       case Vector() => Int.MaxValue
       case Vector(_) => Int.MaxValue
-      case Vector(i1, i2) => (g(i1).count(i2 ==) + g(i2).count(i1 ==)) / 2
+      case Vector(i1, i2) => g(i1).count(i2 ==)
       case _ => {
         val i1 = keys(Random.nextInt(keys.size))
         val i2 = g(i1)(Random.nextInt(g(i1).length))
