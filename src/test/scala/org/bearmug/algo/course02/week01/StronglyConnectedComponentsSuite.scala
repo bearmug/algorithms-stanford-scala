@@ -8,6 +8,6 @@ import org.scalatest.junit.JUnitRunner
 class StronglyConnectedComponentsSuite extends FunSuite {
 
   test("calc works for empty input") {
-    assert(SCC(Map.empty, Map.empty).calc() == List.empty)
+    assert(SCC(List.empty).calc() == List.empty)
   }
 }
