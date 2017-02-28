@@ -11,7 +11,7 @@ class StronglyConnectedComponentsSuite extends FunSuite {
     assert(SCC(List.empty).calc() == List.empty)
   }
 
-//  test("calc works for single edge input") {
-//    assert(SCC(List((1, 2))).calc() == List(1, 1))
-//  }
+  test("calc works for single edge input") {
+    assert(SCC(List((1, 2))).calc() == List(1, 1))
+  }
 }
