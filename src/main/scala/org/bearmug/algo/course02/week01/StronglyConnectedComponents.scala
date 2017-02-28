@@ -1,6 +1,7 @@
 package org.bearmug.algo.course02.week01
 
 import scala.annotation.tailrec
+import scala.math.Ordering
 
 class StronglyConnectedComponents(l: List[(Int, Int)]) {
   type G = List[(Int, Int)]
@@ -50,7 +51,7 @@ class StronglyConnectedComponents(l: List[(Int, Int)]) {
   final def calcScc(vertices: List[Int], visited: Set[Int], acc: List[Int]): List[Int] = vertices match {
     case Nil => acc
     case v :: vTail => dfsR(List(v), visited, List()) match {
-      case (s, l) => calcScc(vTail, visited ++ s, l.length :: acc)
+      case (s, l) => calcScc(vTail.filter(!s.contains(_)), visited ++ s, l.length :: acc)
     }
   }
 
@@ -59,7 +60,7 @@ class StronglyConnectedComponents(l: List[(Int, Int)]) {
     val order = calcFinishOrder(vertices, Set(), List())
 
     // walk through reversed graph counting SCC size, put them to sorted structure
-    calcScc(order, Set(), List())
+    calcScc(order, Set(), List()).sorted(Ordering.Int.reverse)
 
   }
 }
