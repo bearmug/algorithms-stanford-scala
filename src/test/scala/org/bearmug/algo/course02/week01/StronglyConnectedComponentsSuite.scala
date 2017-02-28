@@ -32,6 +32,6 @@ class StronglyConnectedComponentsSuite extends FunSuite {
     assert(SCC(List(
       (1, 7), (7, 4), (4, 1), (7, 9),
       (9, 6), (6, 3), (3, 9), (6, 8),
-      (8, 2), (2, 5), (5, 8))).calc() == List(9))
+      (8, 2), (2, 5), (5, 8))).calc() == List(3, 3, 3))
   }
 }

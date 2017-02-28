@@ -43,7 +43,7 @@ class StronglyConnectedComponents(l: List[(Int, Int)]) {
   final def calcFinishOrder(vertices: Set[Int], visited: Set[Int], acc: List[Int]): List[Int] = vertices.headOption match {
     case None => acc
     case Some(vertex) => dfs(List(vertex), visited, List()) match {
-      case (s, l) => calcFinishOrder(vertices -- s, visited ++ s, acc ::: l)
+      case (s, l) => calcFinishOrder(vertices -- s, visited ++ s, l ::: acc)
     }
   }
 
