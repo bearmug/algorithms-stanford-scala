@@ -4,6 +4,8 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
+import scala.io.Source
+
 @RunWith(classOf[JUnitRunner])
 class StronglyConnectedComponentsSuite extends FunSuite {
 
@@ -33,5 +35,14 @@ class StronglyConnectedComponentsSuite extends FunSuite {
       (1, 7), (7, 4), (4, 1), (7, 9),
       (9, 6), (6, 3), (3, 9), (6, 8),
       (8, 2), (2, 5), (5, 8))).calc() == List(3, 3, 3))
+  }
+
+  ignore("calc works for file") {
+    val data = Source.fromFile("/home/pavel/Downloads/scc.data")
+      .getLines()
+      .map(_.split(" ").map(_.toInt) match {
+        case Array(a, b) => (a, b)
+      }).toList
+    println(SCC(data).calc())
   }
 }
