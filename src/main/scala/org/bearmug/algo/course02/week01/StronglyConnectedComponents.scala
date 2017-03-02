@@ -5,6 +5,7 @@ import scala.math.Ordering
 
 class StronglyConnectedComponents(dMap: Map[Int, List[Int]], rMap: Map[Int, List[Int]]) {
   type G = List[Int]
+  private val vertices = dMap.keySet ++ rMap.keySet
 
   def calc(): String = {
 
@@ -32,7 +33,7 @@ class StronglyConnectedComponents(dMap: Map[Int, List[Int]], rMap: Map[Int, List
       }
     }
 
-    val vertices = dMap.keySet ++ rMap.keySet
+
     // calc vertices finishing order, put them to sorted structure
     val fOrder = calc(rMap, rMap.keySet.toList, vertices, List.empty) {
       _ ::: _
