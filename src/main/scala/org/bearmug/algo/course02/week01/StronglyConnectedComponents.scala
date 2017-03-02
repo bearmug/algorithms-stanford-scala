@@ -3,18 +3,8 @@ package org.bearmug.algo.course02.week01
 import scala.annotation.tailrec
 import scala.math.Ordering
 
-class StronglyConnectedComponents(edges: List[(Int, Int)]) {
+class StronglyConnectedComponents(dMap: Map[Int, List[Int]], rMap: Map[Int, List[Int]]) {
   type G = List[Int]
-
-  /**
-    * Direct adjacency list graph description
-    */
-  private val dMap = edges.groupBy(_._1).map(t => t._1 -> t._2.map(_._2)).withDefaultValue(Nil)
-
-  /**
-    * Reversed adjacency list graph description
-    */
-  private val rMap = edges.groupBy(_._2).map(t => t._1 -> t._2.map(_._1)).withDefaultValue(Nil)
 
   def calc(): String = {
 
@@ -44,17 +34,20 @@ class StronglyConnectedComponents(edges: List[(Int, Int)]) {
 
     val vertices = dMap.keySet ++ rMap.keySet
     // calc vertices finishing order, put them to sorted structure
-    val fOrder = calc(dMap, dMap.keySet.toList, vertices, List.empty) {
+    val fOrder = calc(rMap, rMap.keySet.toList, vertices, List.empty) {
       _ ::: _
     }
 
     // walk through reversed graph counting SCC size, put them to sorted structure
-    calc(rMap, fOrder, vertices, List.empty) {
+    calc(dMap, fOrder, vertices, List.empty) {
       _.length :: _
     } sorted Ordering.Int.reverse take 5 mkString ","
   }
 }
 
 object SCC {
-  def apply(l: List[(Int, Int)]): StronglyConnectedComponents = new StronglyConnectedComponents(l)
+  def apply(l: List[(Int, Int)]): StronglyConnectedComponents = new StronglyConnectedComponents(
+    l.groupBy(_._1).map(t => t._1 -> t._2.map(_._2)).withDefaultValue(Nil),
+    l.groupBy(_._2).map(t => t._1 -> t._2.map(_._1)).withDefaultValue(Nil)
+  )
 }

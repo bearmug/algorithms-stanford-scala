@@ -34,17 +34,5 @@ class StronglyConnectedComponentsSuite extends FunSuite {
     assert(SCC(List(
       (1, 7), (7, 4), (4, 1), (7, 9),
       (9, 6), (6, 3), (3, 9), (6, 8),
-      (8, 2), (2, 5), (5, 8))).calc() == "3,3,3")
+      (8, 2), (2, 5), (5, 8), (4, 3))).calc() == "3,3,3")
   }
-
-  ignore("calc works for file") {
-    val data = Source.fromFile("/home/pavel/Downloads/scc.data")
-      .getLines()
-      .map(_.split(" ").map(_.toInt) match {
-        case Array(a, b) => (a, b)
-      }).toList
-    println(SCC(data).calc())
-  }
-}
-//2120056, 2254, 2066, 1563, 1301
-//434821, 968, 459, 313, 312
