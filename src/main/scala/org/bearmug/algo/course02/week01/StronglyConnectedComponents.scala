@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 import scala.math.Ordering
 
 class StronglyConnectedComponents(edges: List[(Int, Int)]) {
-  type G = List[(Int, Int)]
+  type G = List[Int]
 
   /**
     * Direct adjacency list graph description
@@ -19,10 +19,10 @@ class StronglyConnectedComponents(edges: List[(Int, Int)]) {
   def calc(): List[Int] = {
 
     @tailrec
-    def calc(m: Map[Int, List[Int]], nodes: List[Int], vertices: Set[Int], acc: List[Int])(f: (List[Int], List[Int]) => List[Int]): List[Int] = {
+    def calc(m: Map[Int, G], nodes: G, vertices: Set[Int], acc: G)(f: (G, G) => G): G = {
 
       @tailrec
-      def dfs(stack: Vector[Int], vertices: Set[Int], acc: List[Int]): (Set[Int], List[Int]) = stack.headOption match {
+      def dfs(stack: Vector[Int], vertices: Set[Int], acc: G): (Set[Int], G) = stack.headOption match {
         case None => (vertices, acc)
         case Some(v) => m(v).filter(vertices.contains) match {
           case Nil => dfs(stack.tail, vertices - v, v :: acc)
@@ -42,13 +42,14 @@ class StronglyConnectedComponents(edges: List[(Int, Int)]) {
       }
     }
 
+    val vertices = dMap.keySet ++ rMap.keySet
     // calc vertices finishing order, put them to sorted structure
-    val fOrder = calc(dMap, dMap.keySet.toList, dMap.keySet ++ rMap.keySet, List.empty) {
+    val fOrder = calc(dMap, dMap.keySet.toList, vertices, List.empty) {
       _ ::: _
     }
 
     // walk through reversed graph counting SCC size, put them to sorted structure
-    calc(rMap, fOrder, dMap.keySet ++ rMap.keySet, List.empty) {
+    calc(rMap, fOrder, vertices, List.empty) {
       _.length :: _
     } sorted Ordering.Int.reverse
   }
