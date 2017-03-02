@@ -36,3 +36,4 @@ class StronglyConnectedComponentsSuite extends FunSuite {
       (9, 6), (6, 3), (3, 9), (6, 8),
       (8, 2), (2, 5), (5, 8), (4, 3))).calc() == "3,3,3")
   }
+}
