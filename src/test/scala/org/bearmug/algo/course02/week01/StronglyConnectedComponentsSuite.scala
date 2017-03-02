@@ -46,3 +46,5 @@ class StronglyConnectedComponentsSuite extends FunSuite {
     println(SCC(data).calc())
   }
 }
+//2120056, 2254, 2066, 1563, 1301
+//434821, 968, 459, 313, 312

@@ -7,8 +7,8 @@ import org.openjdk.jmh.annotations._
 import scala.util.Random
 
 /**
-  * Benchmark                 Mode  Cnt    Score    Error  Units
-  *SCCBench.sccCalc         thrpt    5  404.309 ± 10.091  ops/s
+  * Benchmark                 Mode  Cnt    Score   Error  Units
+  *SCCBench.sccCalc         thrpt    5  413.105 ± 3.984  ops/s
   */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
