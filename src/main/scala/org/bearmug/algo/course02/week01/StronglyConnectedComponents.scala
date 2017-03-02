@@ -16,7 +16,7 @@ class StronglyConnectedComponents(edges: List[(Int, Int)]) {
     */
   private val rMap = edges.groupBy(_._2).map(t => t._1 -> t._2.map(_._1)).withDefaultValue(Nil)
 
-  def calc(): List[Int] = {
+  def calc(): String = {
 
     @tailrec
     def calc(m: Map[Int, G], nodes: G, vertices: Set[Int], acc: G)(f: (G, G) => G): G = {
@@ -51,7 +51,7 @@ class StronglyConnectedComponents(edges: List[(Int, Int)]) {
     // walk through reversed graph counting SCC size, put them to sorted structure
     calc(rMap, fOrder, vertices, List.empty) {
       _.length :: _
-    } sorted Ordering.Int.reverse
+    } sorted Ordering.Int.reverse take 5 mkString ","
   }
 }
 
