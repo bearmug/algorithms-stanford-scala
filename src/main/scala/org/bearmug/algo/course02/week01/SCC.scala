@@ -3,11 +3,11 @@ package org.bearmug.algo.course02.week01
 import scala.annotation.tailrec
 import scala.math.Ordering
 
-class StronglyConnectedComponents (input: List[Int], allNodes: Set[Int]) {
+class SCC(input: List[Int], allNodes: Set[Int]) {
   type G = List[Int]
 
   @tailrec
-  final def calc(m: Map[Int, G], in: G, nodes: Set[Int], acc: G)(f: (G, G) => G): StronglyConnectedComponents = {
+  final def calc(m: Map[Int, G], in: G, nodes: Set[Int], acc: G)(f: (G, G) => G): SCC = {
 
     @tailrec
     def dfs(stack: Vector[Int], vertices: Set[Int], acc: G): (Set[Int], G) = stack.headOption match {
@@ -19,7 +19,7 @@ class StronglyConnectedComponents (input: List[Int], allNodes: Set[Int]) {
     }
 
     in.headOption match {
-      case None => new StronglyConnectedComponents(acc, allNodes)
+      case None => new SCC(acc, allNodes)
       case Some(vertex) => if (nodes.contains(vertex)) {
         dfs(Vector(vertex), nodes, List.empty) match {
           case (v, dfsRes) => calc(m, in.tail, v, f(dfsRes, acc))(f)
@@ -30,15 +30,13 @@ class StronglyConnectedComponents (input: List[Int], allNodes: Set[Int]) {
     }
   }
 
-  def dfsFor(m: Map[Int, G])(f: (G, G) => G): StronglyConnectedComponents =
-    calc(m, input, allNodes, List.empty)(f)
+  def dfsFor(m: Map[Int, G])(f: (G, G) => G): SCC = calc(m, input, allNodes, List.empty)(f)
 
   def result[T](f: (G) => T): T = f(input sorted Ordering.Int.reverse)
 }
 
 object SCC {
-  private def apply(l: List[Int], allNodes: Set[Int]): StronglyConnectedComponents =
-    new StronglyConnectedComponents(l, allNodes)
+  private def apply(l: List[Int], allNodes: Set[Int]): SCC = new SCC(l, allNodes)
 
   def calc(l: List[(Int, Int)]): String = {
     val dMap = l.groupBy(_._1).map(t => t._1 -> t._2.map(_._2)).withDefaultValue(Nil)
@@ -49,7 +47,7 @@ object SCC {
         _ ::: _
       }.dfsFor(dMap) {
         _.length :: _
-      } result {
+      }.result {
         _ mkString ","
       }
   }

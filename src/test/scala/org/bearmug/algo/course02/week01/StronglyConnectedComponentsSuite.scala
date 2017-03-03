@@ -4,8 +4,6 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
-import scala.io.Source
-
 @RunWith(classOf[JUnitRunner])
 class StronglyConnectedComponentsSuite extends FunSuite {
 
