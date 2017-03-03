@@ -3,11 +3,11 @@ package org.bearmug.algo.course02.week01
 import scala.annotation.tailrec
 import scala.math.Ordering
 
-class StronglyConnectedComponents (input: List[Int], available: Set[Int]) {
+class StronglyConnectedComponents (input: List[Int], allNodes: Set[Int]) {
   type G = List[Int]
 
   @tailrec
-  final def calc(m: Map[Int, G], in: G, avl: Set[Int], acc: G)(f: (G, G) => G): StronglyConnectedComponents = {
+  final def calc(m: Map[Int, G], in: G, nodes: Set[Int], acc: G)(f: (G, G) => G): StronglyConnectedComponents = {
 
     @tailrec
     def dfs(stack: Vector[Int], vertices: Set[Int], acc: G): (Set[Int], G) = stack.headOption match {
@@ -19,25 +19,26 @@ class StronglyConnectedComponents (input: List[Int], available: Set[Int]) {
     }
 
     in.headOption match {
-      case None => new StronglyConnectedComponents(acc, available)
-      case Some(vertex) => if (avl.contains(vertex)) {
-        dfs(Vector(vertex), avl, List.empty) match {
+      case None => new StronglyConnectedComponents(acc, allNodes)
+      case Some(vertex) => if (nodes.contains(vertex)) {
+        dfs(Vector(vertex), nodes, List.empty) match {
           case (v, dfsRes) => calc(m, in.tail, v, f(dfsRes, acc))(f)
         }
       } else {
-        calc(m, in.tail, avl, acc)(f)
+        calc(m, in.tail, nodes, acc)(f)
       }
     }
   }
 
   def dfsFor(m: Map[Int, G])(f: (G, G) => G): StronglyConnectedComponents =
-    calc(m, input, available, List.empty)(f)
+    calc(m, input, allNodes, List.empty)(f)
 
-  def result: String = input sorted Ordering.Int.reverse mkString ","
+  def result[T](f: (G) => T): T = f(input sorted Ordering.Int.reverse)
 }
 
 object SCC {
-  private def apply(l: List[Int], v: Set[Int]): StronglyConnectedComponents = new StronglyConnectedComponents(l, v)
+  private def apply(l: List[Int], allNodes: Set[Int]): StronglyConnectedComponents =
+    new StronglyConnectedComponents(l, allNodes)
 
   def calc(l: List[(Int, Int)]): String = {
     val dMap = l.groupBy(_._1).map(t => t._1 -> t._2.map(_._2)).withDefaultValue(Nil)
@@ -48,6 +49,8 @@ object SCC {
         _ ::: _
       }.dfsFor(dMap) {
         _.length :: _
-      } result
+      } result {
+        _ mkString ","
+      }
   }
 }
