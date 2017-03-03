@@ -8,7 +8,7 @@ import scala.util.Random
 
 /**
   * Benchmark                 Mode  Cnt    Score   Error  Units
-  *SCCBench.sccCalc         thrpt    5  413.105 ± 3.984  ops/s
+  *SCCBench.sccCalc         thrpt    5  429.938 ± 9.799  ops/s
   */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
@@ -24,5 +24,5 @@ class SCCBench {
   }
 
   @Benchmark
-  def sccCalc(): List[Int] = SCC(data).calc()
+  def sccCalc(): String = SCC.calc(data)
 }
