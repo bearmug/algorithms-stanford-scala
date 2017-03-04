@@ -3,11 +3,11 @@ package org.bearmug.algo.course02.week01
 import scala.annotation.tailrec
 import scala.math.Ordering
 
-class SCC(input: List[Int], allNodes: Set[Int]) {
+class SCC private(input: List[Int], allNodes: Set[Int]) {
   type G = List[Int]
 
   @tailrec
-  final def calc(m: Map[Int, G], in: G, nodes: Set[Int], acc: G)(f: (G, G) => G): SCC = {
+  private def calc(m: Map[Int, G], in: G, nodes: Set[Int], acc: G)(f: (G, G) => G): SCC = {
 
     @tailrec
     def dfs(dfsIn: Vector[Int], dfsNodes: Set[Int], dfsAcc: G): (Set[Int], G) = dfsIn.headOption match {
@@ -35,18 +35,17 @@ class SCC(input: List[Int], allNodes: Set[Int]) {
   }
 
   def dfsFor(m: Map[Int, G])(f: (G, G) => G): SCC = calc(m, input, allNodes, List.empty)(f)
-
   def result[T](f: (G) => T): T = f(input sorted Ordering.Int.reverse)
 }
 
 object SCC {
-  private def apply(l: List[Int], allNodes: Set[Int]): SCC = new SCC(l, allNodes)
+  private def apply(l: SCC#G, allNodes: Set[Int]): SCC = new SCC(l, allNodes)
 
-  private def maps(l: List[(Int, Int)]): (Map[Int, List[Int]], Map[Int, List[Int]]) = (
+  private def maps(l: List[(Int, Int)]): (Map[Int, SCC#G], Map[Int, SCC#G]) = (
     l.groupBy(_._1).map(t => t._1 -> t._2.map(_._2)).withDefaultValue(Nil),
     l.groupBy(_._2).map(t => t._1 -> t._2.map(_._1)).withDefaultValue(Nil))
 
-  private def calcScc(maps: (Map[Int, List[Int]], Map[Int, List[Int]])): SCC = maps match {
+  private def calcScc(maps: (Map[Int, SCC#G], Map[Int, SCC#G])): SCC = maps match {
     case (directMap, reversedMap) =>
       SCC(directMap.keySet.toList, directMap.keySet ++ reversedMap.keySet)
         .dfsFor(directMap) {
