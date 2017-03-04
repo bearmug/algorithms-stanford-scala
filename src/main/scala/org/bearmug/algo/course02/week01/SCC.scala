@@ -10,22 +10,22 @@ class SCC private(input: List[Int], allNodes: Set[Int]) {
   private def calc(m: Map[Int, G], in: G, nodes: Set[Int], acc: G)(f: (G, G) => G): SCC = {
 
     @tailrec
-    def dfs(dfsIn: Vector[Int], dfsNodes: Set[Int], dfsAcc: G): (Set[Int], G) = dfsIn.headOption match {
+    def dfs(dfsIn: Vector[Int], dfsNodes: Set[Int], dfsAcc: G, dfsAccSet: Set[Int]): (Set[Int], G) = dfsIn.headOption match {
       case None => (dfsNodes, dfsAcc)
       case Some(v) => m(v).filter(dfsNodes.contains) match {
-        case Nil => if (dfsAcc.contains(v)) {
-          dfs(dfsIn.tail, dfsNodes, dfsAcc)
+        case Nil => if (dfsAccSet.contains(v)) {
+          dfs(dfsIn.tail, dfsNodes, dfsAcc, dfsAccSet)
         } else {
-          dfs(dfsIn.tail, dfsNodes - v, v :: dfsAcc)
+          dfs(dfsIn.tail, dfsNodes - v, v :: dfsAcc, dfsAccSet + v)
         }
-        case list => dfs(list.toVector ++ dfsIn, dfsNodes - v, dfsAcc)
+        case list => dfs(list.toVector ++ dfsIn, dfsNodes - v, dfsAcc, dfsAccSet)
       }
     }
 
     in.headOption match {
       case None => new SCC(acc, allNodes)
       case Some(vertex) => if (nodes.contains(vertex)) {
-        dfs(Vector(vertex), nodes, List.empty) match {
+        dfs(Vector(vertex), nodes, List.empty, Set.empty) match {
           case (v, dfsRes) => calc(m, in.tail, v, f(dfsRes, acc))(f)
         }
       } else {

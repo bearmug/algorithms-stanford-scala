@@ -8,7 +8,7 @@ import scala.util.Random
 
 /**
   * Benchmark                 Mode  Cnt   Score   Error  Units
-  *SCCBench.sccCalc         thrpt    5  21.070 ± 0.205  ops/s
+  *SCCBench.sccCalc         thrpt    5  70.408 ± 0.975  ops/s
   */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
