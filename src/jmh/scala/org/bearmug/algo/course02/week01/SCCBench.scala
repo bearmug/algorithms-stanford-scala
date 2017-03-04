@@ -7,8 +7,8 @@ import org.openjdk.jmh.annotations._
 import scala.util.Random
 
 /**
-  * Benchmark                 Mode  Cnt    Score   Error  Units
-  *SCCBench.sccCalc         thrpt    5  429.938 ± 9.799  ops/s
+  * Benchmark                 Mode  Cnt   Score   Error  Units
+  *SCCBench.sccCalc         thrpt    5  21.070 ± 0.205  ops/s
   */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
@@ -20,7 +20,7 @@ class SCCBench {
 
   @Setup
   def setup() = {
-    data = (1 to 1000).map(_ => (Random.nextInt(1000), Random.nextInt(1000))).toList
+    data = (1 to 10000).map(_ => (Random.nextInt(1000), Random.nextInt(1000))).toList
   }
 
   @Benchmark
