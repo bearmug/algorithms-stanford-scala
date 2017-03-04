@@ -13,7 +13,11 @@ class SCC(input: List[Int], allNodes: Set[Int]) {
     def dfs(dfsIn: Vector[Int], dfsNodes: Set[Int], dfsAcc: G): (Set[Int], G) = dfsIn.headOption match {
       case None => (dfsNodes, dfsAcc)
       case Some(v) => m(v).filter(dfsNodes.contains) match {
-        case Nil => dfs(dfsIn.tail, dfsNodes - v, v :: dfsAcc)
+        case Nil => if (dfsAcc.contains(v)) {
+          dfs(dfsIn.tail, dfsNodes, dfsAcc)
+        } else {
+          dfs(dfsIn.tail, dfsNodes - v, v :: dfsAcc)
+        }
         case list => dfs(list.toVector ++ dfsIn, dfsNodes - v, dfsAcc)
       }
     }

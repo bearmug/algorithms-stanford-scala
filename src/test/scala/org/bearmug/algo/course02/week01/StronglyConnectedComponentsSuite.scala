@@ -38,7 +38,7 @@ class StronglyConnectedComponentsSuite extends FunSuite {
   }
 
   test("calc works for generated graph") {
-    assert(SCC.calc(List((2,1), (2,3), (1,3), (0,1))) == "2,1,1")
+    assert(SCC.calc(List((2,1), (2,3), (1,3), (0,1))) == "1,1,1,1")
   }
 
   test("lectures scc algorithm is commutative") {
