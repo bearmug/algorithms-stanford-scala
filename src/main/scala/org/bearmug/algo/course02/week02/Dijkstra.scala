@@ -5,8 +5,8 @@ import scala.annotation.tailrec
 
 class Dijkstra private(m: Map[Int, List[(Int, Int)]]) {
 
-  type M = Map[Int, List[(Int, Int)]]
   type N = List[(Int, Int)]
+  type M = Map[Int, N]
 
   def shortestPaths(source: Int): N = {
 
