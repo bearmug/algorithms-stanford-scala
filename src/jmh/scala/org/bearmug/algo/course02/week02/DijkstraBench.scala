@@ -7,8 +7,8 @@ import org.openjdk.jmh.annotations._
 import scala.util.Random
 
 /**
-  * Benchmark                            Mode  Cnt  Score   Error  Units
-  *DijkstraBench.shortestPaths         thrpt    5  2.552 ± 0.134  ops/s
+  * Benchmark                            Mode  Cnt   Score   Error  Units
+  *DijkstraBench.shortestPaths         thrpt    5  55.978 ± 1.278  ops/s
   */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
