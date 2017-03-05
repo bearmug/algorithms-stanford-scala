@@ -67,6 +67,14 @@ class InversionsSuite extends FunSuite {
     assert(Inversions((1 to 100000 reverse).toVector).inversionsPar(4) == (100000 / 2) * (100000 - 1))
   }
 
+  test("inversionsForce works for single element") {
+    assert(Inversions(Vector(1)).inversionsForce() == 0)
+  }
+
+  test("inversionsForce works for of non-inversed elements") {
+    assert(Inversions(Vector(1, 2, 3)).inversionsForce() == 0)
+  }
+
   test("inversionsForce works for of three two inversed elements") {
     assert(Inversions(Vector(3, 2, 1)).inversionsForce() == 3)
   }

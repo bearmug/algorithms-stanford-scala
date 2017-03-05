@@ -10,6 +10,10 @@ class KargerSuite extends FunSuite {
     assert(Karger(Map[Int, List[Int]]()).minCut() == Int.MaxValue)
   }
 
+  test("minCut works for one-node graph") {
+    assert(Karger(Map(1 -> List(2))).minCut() == Int.MaxValue)
+  }
+
   test("minCut works for two-nodes graph") {
     assert(Karger(Map(1 -> List(2), 2 -> List(1))).minCut() == 1)
   }
