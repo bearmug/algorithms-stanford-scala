@@ -11,19 +11,23 @@ class Dijkstra private(m: Map[Int, List[(Int, Int)]]) {
   def shortestPaths(source: Int): N = {
 
     @tailrec
-    def shortestPaths(frontier: N, acc: N): N = frontier match {
+    def shortestPaths(frontier: N, visited: Set[Int], acc: N): N = frontier match {
       case Nil => acc
       case (v, cost) :: tail => {
-        val increment = m(v)
-          .filter(n => !acc.map(_._1).toSet.contains(n))
-          .map(n => (n._1, n._2 + cost))
-        shortestPaths((increment ::: tail).sortBy(_._2).reverse, increment ::: acc)
+        if (visited.contains(v)) {
+          shortestPaths(tail, visited, acc)
+        } else {
+          val increment = m(v).map(n => (n._1, n._2 + cost))
+          shortestPaths(
+            (increment ::: tail).sortBy(_._2).reverse,
+            visited + v,
+            ((v, cost) :: acc).sortBy(_._2))
+        }
       }
     }
 
-    shortestPaths(m(source).sortBy(_._2).reverse, List.empty)
+    shortestPaths(m(source), Set(source), List.empty)
   }
-
 }
 
 object Dijkstra {
