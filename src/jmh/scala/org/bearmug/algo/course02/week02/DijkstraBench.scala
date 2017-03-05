@@ -8,7 +8,7 @@ import scala.util.Random
 
 /**
   * Benchmark                            Mode  Cnt  Score   Error  Units
-  *DijkstraBench.shortestPaths         thrpt    5  1.479 ± 1.204  ops/s
+  *DijkstraBench.shortestPaths         thrpt    5  2.552 ± 0.134  ops/s
   */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
@@ -22,7 +22,7 @@ class DijkstraBench {
   def setup() = {
     gr = (1 to 10000).map { _ =>
       Random.nextInt(1000) ->
-        (1 to 30).map { n =>
+        (1 to 30).map { _ =>
           (Random.nextInt(1000), Random.nextInt(1000))
         }.toList
     }.toMap

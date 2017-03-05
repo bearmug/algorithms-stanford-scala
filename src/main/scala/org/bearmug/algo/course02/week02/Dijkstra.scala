@@ -12,7 +12,7 @@ class Dijkstra private(m: Map[Int, List[(Int, Int)]]) {
 
     @tailrec
     def shortestPaths(frontier: N, visited: Set[Int], acc: N): N = frontier match {
-      case Nil => acc
+      case Nil => acc.sortBy(_._2)
       case (v, cost) :: tail => {
         if (visited.contains(v)) {
           shortestPaths(tail, visited, acc)
@@ -21,7 +21,7 @@ class Dijkstra private(m: Map[Int, List[(Int, Int)]]) {
           shortestPaths(
             (increment ::: tail).sortBy(_._2),
             visited + v,
-            ((v, cost) :: acc).sortBy(_._2))
+            (v, cost) :: acc)
         }
       }
     }
