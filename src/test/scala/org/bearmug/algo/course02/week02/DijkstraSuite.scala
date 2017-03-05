@@ -34,6 +34,6 @@ class DijkstraSuite extends FunSuite {
       2 -> List((4, 10)),
       3 -> List((4, 6), (5, 5)),
       4 -> List((6, 1)),
-      5 -> List((6, 20)))).shortestPaths(1) == List((2,1), (3,3), (5,8), (4,11), (6,12)))
+      5 -> List((6, 20)))).shortestPaths(1) == List((2, 1), (3, 3), (5, 8), (4, 9), (6, 10)))
   }
 }

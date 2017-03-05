@@ -19,14 +19,14 @@ class Dijkstra private(m: Map[Int, List[(Int, Int)]]) {
         } else {
           val increment = m(v).map(n => (n._1, n._2 + cost))
           shortestPaths(
-            (increment ::: tail).sortBy(_._2).reverse,
+            (increment ::: tail).sortBy(_._2),
             visited + v,
             ((v, cost) :: acc).sortBy(_._2))
         }
       }
     }
 
-    shortestPaths(m(source), Set(source), List.empty)
+    shortestPaths(m(source).sortBy(_._2), Set(source), List.empty)
   }
 }
 
