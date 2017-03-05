@@ -27,4 +27,13 @@ class DijkstraSuite extends FunSuite {
   test("shortestPaths works for two vertices cyclic graph") {
     assert(Dijkstra(Map(1 -> List((2, 1)), 2 -> List((1, 1)))).shortestPaths(1) == List((2, 1)))
   }
+
+  test("shortestPaths works for two diamonds graph") {
+    assert(Dijkstra(Map(
+      1 -> List((2, 1), (3, 3)),
+      2 -> List((4, 10)),
+      3 -> List((4, 6), (5, 5)),
+      4 -> List((6, 1)),
+      5 -> List((6, 20)))).shortestPaths(1) == List((2,1), (3,3), (5,8), (4,11), (6,12)))
+  }
 }
