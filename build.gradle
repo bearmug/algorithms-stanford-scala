@@ -17,8 +17,8 @@ sourceSets {
 }
 
 jmh {
-    include = '.*course02.*'
-    jmhVersion = '1.17'
+    include = '.*course02.week02.*'
+    jmhVersion = '1.17.5'
     profilers = ['stack']
 }
 
