@@ -7,7 +7,11 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class DijkstraSuite extends FunSuite {
 
-  test("dummy test") {
-    assert(Dijkstra().isInstanceOf[Dijkstra])
+  test("shortestPaths for empty graph return empty list") {
+    assert(Dijkstra(Map.empty).shortestPaths(1) == List.empty)
+  }
+
+  test("shortestPaths for one node return empty list") {
+    assert(Dijkstra(Map(1 -> List.empty)).shortestPaths(1) == List.empty)
   }
 }
