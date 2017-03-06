@@ -28,8 +28,7 @@ class Karger(m: Map[Int, List[Int]]) {
     }
 
     m match {
-      case e if e.isEmpty => Int.MaxValue
-      case _ => (0 until m.size).map { _ => calcCut(m, m.keys.toVector) } min
+      case _ => (0 until (m.size max 10)).map { _ => calcCut(m, m.keys.toVector) }.min
     }
   }
 }
@@ -38,8 +37,12 @@ object Karger {
   def apply(m: Map[Int, List[Int]]): Karger = new Karger(m)
 
   def apply(fileName: String): Karger =
-    apply(Source.fromURL(getClass.getResource(fileName)).getLines().map{ _.split("\t").map(_.toInt).toList match {
-      case n :: rest => n -> rest
-    }}.toMap)
+    apply(Source.fromURL(getClass.getResource(fileName))
+      .getLines()
+      .map(_
+        .split("\t")
+        .map(_.toInt)
+        .toList)
+      .map(l => l.head -> l.tail).toMap)
 }
 
