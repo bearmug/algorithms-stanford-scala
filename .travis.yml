@@ -13,7 +13,7 @@ env:
     - GRADLE_OPTS="-Xms256m"
 
 install: echo "skip 'gradle assemble' step"
-script: gradlew checkScoverage --continue --info
+script: ./gradlew checkScoverage --continue --info
 
 after_success:
-  - gradlew coveralls
+  - ./gradlew coveralls
