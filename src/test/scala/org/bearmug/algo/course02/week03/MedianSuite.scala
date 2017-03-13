@@ -4,6 +4,7 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
+import scala.io.Source
 import scala.util.Random
 
 @RunWith(classOf[JUnitRunner])
@@ -18,8 +19,8 @@ class MedianSuite extends FunSuite {
   }
 
   test("calc works for two elements") {
-    assert((Median() + 1 + 3).calc == 3)
-    assert((Median() + 5 + 3).calc == 5)
+    assert((Median() + 1 + 3).calc == 1)
+    assert((Median() + 5 + 3).calc == 3)
   }
 
   test("calc works for two same elements") {
@@ -34,8 +35,8 @@ class MedianSuite extends FunSuite {
   }
 
   test("calc works for four elements") {
-    assert((Median() + 1 + 3 + 2 + 4).calc == 3)
-    assert((Median() + 5 + 3 + 4 + 2).calc == 4)
+    assert((Median() + 1 + 3 + 2 + 4).calc == 2)
+    assert((Median() + 5 + 3 + 4 + 2).calc == 3)
   }
 
   test("calc works for five elements") {
@@ -46,7 +47,7 @@ class MedianSuite extends FunSuite {
   test("calc works for even elements") {
     for (i <- 2 to 1000){
       val data: Vector[Int] = Seq.fill(i)(Random.nextInt(100000)).toSet.toVector
-      assert(data.sorted.apply(data.length/2) == data.foldLeft(Median())((m, i) => m + i).calc,
+      assert(data.sorted.apply((data.length - 1)/2) == data.foldLeft(Median())((m, i) => m + i).calc,
         s", \nlength: $i," +
           s"\ninput: $data")
     }

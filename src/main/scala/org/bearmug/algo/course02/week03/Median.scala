@@ -12,23 +12,23 @@ class Median private(lHeap: SortedSet[Int], rHeap: SortedSet[Int]) {
   def +(e: Int): Median = {
 
     def balance(l: H, r: H): (H, H) = (l.size, r.size) match {
-      case (lS, rS) if lS > rS => (l.tail, r + l.head)
-      case (lS, rS) if lS + 1 < rS => (l + r.head, r.tail)
+      case (lS, rS) if lS < rS => (l + r.head, r.tail)
+      case (lS, rS) if lS > rS + 1 => (l.tail, r + l.head)
       case (_, _) => (l, r)
     }
 
     // use currying for explicit branching
     def add(e: Int)(f: (H, H) => (H, H)): (H, H) =
       (lHeap.headOption, rHeap.headOption) match {
-      case (_, None) => f(lHeap, rHeap + e)
-      case (_, Some(rHead)) if e >= rHead => f(lHeap, rHeap + e)
-      case (_, _) => f(lHeap + e, rHeap)
+      case (None, _) => f(lHeap + e, rHeap)
+      case (Some(lHead), _) if e <= lHead => f(lHeap + e, rHeap)
+      case (_, _) => f(lHeap, rHeap + e)
     }
 
     Median(add(e)(balance))
   }
 
-  def calc: Int = rHeap.headOption match {
+  def calc: Int = lHeap.headOption match {
     case Some(m) => m
     case _ => Int.MaxValue
   }
