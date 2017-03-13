@@ -44,6 +44,15 @@ class MedianSuite extends FunSuite {
     assert((Median() + 5 + 3 + 4 + 2 + 1).calc == 3)
   }
 
+  test("calc works for empty list") {
+    assert(Median(List.empty).calc == Int.MaxValue)
+  }
+
+  test("calc works for non-empty list") {
+    assert(Median(List(3, 2, 5, 4, 1)).calc == 3)
+    assert(Median(List(3, 2, 5, 6, 4, 1)).calc == 3)
+  }
+
   test("calc works for even elements") {
     for (i <- 2 to 1000){
       val data: Vector[Int] = Seq.fill(i)(Random.nextInt(100000)).toSet.toVector
@@ -51,5 +60,15 @@ class MedianSuite extends FunSuite {
         s", \nlength: $i," +
           s"\ninput: $data")
     }
+  }
+
+  test("medianSum works for single element") {
+    assert(Median.medianSum(List(1)) == 1)
+  }
+
+  test("medianSum works for elements list") {
+    assert(Median.medianSum(List(3, 1, 2, 4, 0, 5)) == 12)
+    assert(Median.medianSum(List(0, 1, 2, 3, 4, 5)) == 6)
+    assert(Median.medianSum(List(5, 4, 3, 2, 1, 0)) == 21)
   }
 }

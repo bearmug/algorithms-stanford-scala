@@ -36,5 +36,10 @@ class Median private(lHeap: SortedSet[Int], rHeap: SortedSet[Int]) {
 
 object Median {
   def apply(): Median = new Median(TreeSet.empty(Ordering.Int.reverse), TreeSet.empty(Ordering.Int))
+  def apply(l: List[Int]): Median = l.foldLeft(Median())((m, i) => m + i)
   private def apply(lr: (SortedSet[Int], SortedSet[Int])) = new Median(lr._1, lr._2)
+  def medianSum(l: List[Int]): Int = l.foldLeft((0, Median()))((t, i) => {
+    val m = t._2 + i
+    (t._1 + m.calc, m)
+  })._1
 }
