@@ -11,10 +11,10 @@ cache:
 
 env:
   global:
-    - GRADLE_OPTS="-Xms256m"
+    - GRADLE_OPTS="-Xms128m"
 
 install: echo "skip 'gradle assemble' step"
-script: ./gradlew checkScoverage --continue --info
+script: ./gradlew checkScoverage --continue
 
 after_success:
-  - ./gradlew coveralls
+  - ./gradle coveralls
