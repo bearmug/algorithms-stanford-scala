@@ -49,7 +49,7 @@ class StronglyConnectedComponentsSuite extends FunSuite {
   }
 
   test("scc for random graph is commutative") {
-    for (_ <- 1 to 1000) {
+    for (_ <- 1 to 100) {
       val data = (1 to 1000).map(_ => (Random.nextInt(1000), Random.nextInt(1000)))
         .filter(t => t._1 != t._2) // filter 1-node loops
         .toSet // clean duplicates

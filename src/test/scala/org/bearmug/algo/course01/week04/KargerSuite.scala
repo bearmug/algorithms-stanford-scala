@@ -31,7 +31,8 @@ class KargerSuite extends FunSuite {
     assert(Karger(l).minCut() == 2)
   }
 
-  test("minCut works for test file") {
+  //time-consuming test
+  ignore("minCut works for test file") {
     assert(Karger("/karger.data").minCut() == 17)
   }
 }
