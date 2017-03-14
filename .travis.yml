@@ -1,4 +1,5 @@
 language: java
+sudo: true
 
 jdk:
   - oraclejdk8
@@ -13,7 +14,7 @@ env:
     - GRADLE_OPTS="-Xms128m"
 
 install: echo "skip 'gradle assemble' step"
-script: gradle build --continue
+script: ./gradlew checkScoverage --continue
 
 after_success:
-  - gradle checkScoverage coveralls
+  - ./gradle coveralls
