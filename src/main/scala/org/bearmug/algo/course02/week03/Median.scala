@@ -46,11 +46,21 @@ object MFactory {
     override protected def findSet: SortedSet[Int] = h.drop((h.size - 1)/2)
   }
 
+  class MedianPlain (s: Set[Int]) extends Median {
+
+    override def +(e: Int): Median = plain(s + e)
+
+    override protected def findSet: SortedSet[Int] = (TreeSet.empty(Ordering.Int) ++ s).drop((s.size - 1)/2)
+  }
+
   private def dualHeap(lr: (SortedSet[Int], SortedSet[Int])): Median = new MedianDualHeap(lr._1, lr._2)
   def dualHeap(): Median = dualHeap(TreeSet.empty(Ordering.Int.reverse), TreeSet.empty(Ordering.Int))
 
   private def singleHeap(s: SortedSet[Int]): Median = new MedianHeap(s)
   def singleHeap(): Median = singleHeap(TreeSet.empty(Ordering.Int))
+
+  private def plain(s: Set[Int]): Median = new MedianPlain(s)
+  def plain(): Median = plain(Set.empty)
 
   def forList(l: List[Int])(f: => Median): Median = l.foldLeft(f)((m, i) => m + i)
   def medianSum(l: List[Int])(f: => Median): Int = l.foldLeft((0, f))((t, i) => {
