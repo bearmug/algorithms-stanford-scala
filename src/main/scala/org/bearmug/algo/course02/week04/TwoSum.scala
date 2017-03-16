@@ -5,10 +5,10 @@ class TwoSum private(s: Set[Int]) {
 
     def calc(set: Set[Int], detected: Set[Int]): Int = set.headOption match {
       case None => detected.size
-      case Some(n) => if (detected.contains(n min (goal - n))) {
-        calc(set.tail, detected)
+      case Some(n) => if (set.contains(goal - n) && !detected.contains(n min (goal - n))) {
+        calc(set - n - (goal - n), detected + (n min (goal - n)))
       } else {
-        calc(set.tail, detected + (n min (goal - n)))
+        calc(set.tail, detected)
       }
     }
 
