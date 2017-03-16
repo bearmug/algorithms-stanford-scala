@@ -1,11 +1,13 @@
 package org.bearmug.algo.course02.week03
 
+import scala.annotation.tailrec
 import scala.collection.immutable.{SortedSet, TreeSet}
 
 trait Median {
   def +(e: Int): Median
+  def ++(l: List[Int]): Median
   protected def findSet: SortedSet[Int]
-  def calc: Int = findSet.headOption match {
+  final def calc: Int = findSet.headOption match {
     case Some(m) => m
     case _ => Int.MaxValue
   }
@@ -17,39 +19,37 @@ object MFactory {
 
     type H = SortedSet[Int]
 
-    override def +(e: Int): Median = {
-
-      def balance(l: H, r: H): (H, H) = (l.size, r.size) match {
-        case (lS, rS) if lS < rS => (l + r.head, r.tail)
-        case (lS, rS) if lS > rS + 1 => (l.tail, r + l.head)
-        case (_, _) => (l, r)
-      }
-
-      // use currying for explicit branching
-      def add(e: Int)(f: (H, H) => (H, H)): (H, H) =
-        (lHeap.headOption, rHeap.headOption) match {
-          case (None, _) => f(lHeap + e, rHeap)
-          case (Some(lHead), _) if e <= lHead => f(lHeap + e, rHeap)
-          case (_, _) => f(lHeap, rHeap + e)
-        }
-
-      MFactory.dualHeap(add(e)(balance))
+    @tailrec
+    private def balance(l: H, r: H): (H, H) = (l.size, r.size) match {
+      case (lS, rS) if lS < rS => balance(l + r.head, r.tail)
+      case (lS, rS) if lS > rS + 1 => balance(l.tail, r + l.head)
+      case (_, _) => (l, r)
     }
 
+    @tailrec
+    private def add(list: List[Int], l: H, r: H): (H, H) = list match {
+      case Nil => balance(l, r)
+      case head :: tail => (l.headOption, r.headOption) match {
+        case (None, _) => add(tail, l + head, r)
+        case (Some(lHead), _) if head <= lHead => add(tail, l + head, r)
+        case (_, _) => add(tail, l, r + head)
+      }
+    }
+    override def ++(l: List[Int]): Median = dualHeap(add(l, lHeap, rHeap))
+    override def +(e: Int): Median = this ++ (e :: Nil)
     override protected def findSet: SortedSet[Int] = lHeap
   }
 
   class MedianHeap (h: SortedSet[Int]) extends Median {
-
     override def +(e: Int): Median = singleHeap(h + e)
-
+    override def ++(l: List[Int]): Median = singleHeap(h ++ l)
     override protected def findSet: SortedSet[Int] = h.drop((h.size - 1)/2)
   }
 
   class MedianPlain (s: Set[Int]) extends Median {
 
     override def +(e: Int): Median = plain(s + e)
-
+    override def ++(l: List[Int]): Median = plain(s ++ l)
     override protected def findSet: SortedSet[Int] = (TreeSet.empty(Ordering.Int) ++ s).drop((s.size - 1)/2)
   }
 
@@ -62,7 +62,6 @@ object MFactory {
   private def plain(s: Set[Int]): Median = new MedianPlain(s)
   def plain(): Median = plain(Set.empty)
 
-  def forList(l: List[Int])(f: => Median): Median = l.foldLeft(f)((m, i) => m + i)
   def medianSum(l: List[Int])(f: => Median): Int = l.foldLeft((0, f))((t, i) => {
     val m = t._2 + i
     (t._1 + m.calc, m)
