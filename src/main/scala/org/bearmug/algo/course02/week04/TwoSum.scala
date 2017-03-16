@@ -1,6 +1,6 @@
 package org.bearmug.algo.course02.week04
 
-class TwoSum private(s: Set[Long]) {
+class TwoSum private(initialSet: Set[Long]) {
 
   /**
     * Finds number of 2 distinct numbers which give sum equals to goal
@@ -10,18 +10,18 @@ class TwoSum private(s: Set[Long]) {
   def calcFor(goal: Int): Int = {
     def calc(set: Set[Long], detected: Set[Long]): Int = set.headOption match {
       case None => detected.size
-      case Some(n) => if (set.contains(goal - n) && !detected.contains(n min (goal - n))) {
-        calc(set - n - (goal - n), detected + (n min (goal - n)))
-      } else {
-        calc(set.tail, detected)
-      }
+      case Some(n) if n > goal / 2 => calc(set.tail, detected)
+      case Some(n) if detected.contains(n) || !initialSet.contains(goal - n) => calc(set.tail, detected)
+      case Some(n) => calc(set - n, detected + n)
     }
 
-    calc(s, Set.empty)
+    calc(initialSet, Set.empty)
   }
 
   def satisfyFor(goal: Long): Boolean = {
-    s.find(l => l != goal - l && s.contains(goal - l)) match {
+    initialSet
+      .filter(_ <= goal / 2)
+      .find(l => l != goal - l && initialSet.contains(goal - l)) match {
       case None => false
       case Some(_) => true
     }
@@ -29,5 +29,5 @@ class TwoSum private(s: Set[Long]) {
 }
 
 object TwoSum {
-  def apply(s: Set[Long]): TwoSum = new TwoSum(s)
+  def apply(initialSet: Set[Long]): TwoSum = new TwoSum(initialSet)
 }
