@@ -7,9 +7,9 @@ import org.openjdk.jmh.annotations._
 import scala.util.Random
 
 /**
-  * Benchmark                     Mode  Cnt       Score       Error  Units
-  *TwoSumBench.calcBench        thrpt    5       0.082 ±     0.010  ops/s
-  *TwoSumBench.satisfyForBench  thrpt    5  112697.025 ± 31278.765  ops/s
+  * Benchmark                     Mode  Cnt     Score    Error  Units
+  *TwoSumBench.calcBench        thrpt    5     0.093 ±  0.003  ops/s
+  *TwoSumBench.satisfyForBench  thrpt    5  3549.907 ± 40.906  ops/s
   *
   */
 @State(Scope.Benchmark)
@@ -32,5 +32,5 @@ class TwoSumBench {
   def calcBench(): Int = sum.calcFor(300000)
 
   @Benchmark
-  def satisfyForBench(): Boolean = sum.satisfyFor(300000L)
+  def satisfyForBench(): Boolean = sum.satisfyFor(1000000L)
 }
