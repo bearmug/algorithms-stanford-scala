@@ -8,8 +8,8 @@ import scala.util.Random
 
 /**
   * Benchmark                     Mode  Cnt     Score    Error  Units
-  *TwoSumBench.calcBench        thrpt    5     0.093 ±  0.003  ops/s
-  *TwoSumBench.satisfyForBench  thrpt    5  3549.907 ± 40.906  ops/s
+  *TwoSumBench.calcBench        thrpt    5  4143.575 ± 57.503  ops/s
+  *TwoSumBench.satisfyForBench  thrpt    5  3610.556 ± 45.992  ops/s
   *
   */
 @State(Scope.Benchmark)
