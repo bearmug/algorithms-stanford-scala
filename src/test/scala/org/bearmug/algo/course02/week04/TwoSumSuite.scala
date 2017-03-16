@@ -14,4 +14,8 @@ class TwoSumSuite extends FunSuite {
     assert(TwoSum(Set(1, 2)).calcFor(3) == 1)
     assert(TwoSum(Set(5, -2)).calcFor(3) == 1)
   }
+
+  test("calc works for ten numbers") {
+    assert(TwoSum(Set(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).calcFor(11) == 5)
+  }
 }
