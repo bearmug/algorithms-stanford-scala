@@ -4,8 +4,6 @@ import org.junit.runner.RunWith
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
-import scala.io.Source
-
 @RunWith(classOf[JUnitRunner])
 class TwoSumSuite extends FunSuite {
   test("calc works for empty data") {
@@ -21,12 +19,19 @@ class TwoSumSuite extends FunSuite {
     assert(TwoSum(Set(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).calcFor(11) == 5)
   }
 
-  ignore("file works") {
-    val data: Set[Long] = Source.fromFile("/home/pavel/Downloads/2sum.txt")
-      .getLines()
-      .map(_.toLong)
-      .toSet
+  test("calc works for 1000 numbers") {
+    assert(TwoSum((1L to 1000L).toSet).calcFor(400) == 200)
+  }
 
-    println((-10000 to 10000).par.count(TwoSum(data).satisfyFor(_)))
+  test("satisfyFor is false for unavailable sum") {
+    assert(!TwoSum((1L to 1000L).toSet).satisfyFor(2001))
+  }
+
+  test("satisfyFor does not match to 2 same numbers") {
+    assert(!TwoSum(Set(1)).satisfyFor(2))
+  }
+
+  test("satisfyFor is true for available sum") {
+    assert(TwoSum((1L to 1000L).toSet).satisfyFor(333))
   }
 }
