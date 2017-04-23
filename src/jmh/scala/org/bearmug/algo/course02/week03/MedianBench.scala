@@ -8,20 +8,18 @@ import org.openjdk.jmh.annotations._
 import scala.util.Random
 
 /**
-  * Benchmark                              Mode  Cnt         Score        Error  Units
-  *MedianBench.addHeap                   thrpt    5       231.754 ±     46.140  ops/s
-  *MedianBench.addHeapDual               thrpt    5       129.028 ±      1.544  ops/s
-  *MedianBench.addListHeap               thrpt    5       238.251 ±      4.953  ops/s
-  *MedianBench.addListHeapDual           thrpt    5       124.804 ±      1.323  ops/s
-  *MedianBench.addListPlain              thrpt    5       396.950 ±     23.134  ops/s
-  *MedianBench.addPlain                  thrpt    5       429.844 ±      6.089  ops/s
-  *MedianBench.calcHeap                  thrpt    5   1352475.869 ±  78659.761  ops/s
-  *MedianBench.calcHeapDual              thrpt    5  55355068.901 ± 510635.733  ops/s
-  *MedianBench.calcPlain                 thrpt    5       213.683 ±      3.011  ops/s
-  *MedianBench.medianSumHeap             thrpt    5        92.535 ±      1.106  ops/s
-  *MedianBench.medianSumHeapDual         thrpt    5       125.834 ±     16.723  ops/s
-  *MedianBench.medianSumPlain            thrpt    5         0.043 ±      0.002  ops/s
-  *
+  * MedianBench.addHeap            thrpt    5       215.527 ±       4.205  ops/s
+  *MedianBench.addHeapDual        thrpt    5       102.160 ±       0.993  ops/s
+  *MedianBench.addListHeap        thrpt    5       231.365 ±       3.983  ops/s
+  *MedianBench.addListHeapDual    thrpt    5       158.848 ±       7.223  ops/s
+  *MedianBench.addListPlain       thrpt    5       351.982 ±       8.576  ops/s
+  *MedianBench.addPlain           thrpt    5       343.175 ±      10.108  ops/s
+  *MedianBench.calcHeap           thrpt    5   1721001.551 ±   22275.313  ops/s
+  *MedianBench.calcHeapDual       thrpt    5  40102966.933 ± 3821772.618  ops/s
+  *MedianBench.calcPlain          thrpt    5       215.677 ±       3.014  ops/s
+  *MedianBench.medianSumHeap      thrpt    5        80.459 ±       5.728  ops/s
+  *MedianBench.medianSumHeapDual  thrpt    5        95.776 ±       4.398  ops/s
+  *MedianBench.medianSumPlain     thrpt    5         0.043 ±       0.019  ops/s
   */
 @State(Scope.Benchmark)
 @Warmup(iterations = 2, time = 5, timeUnit = TimeUnit.SECONDS)
@@ -37,9 +35,9 @@ class MedianBench {
   @Setup
   def setup() = {
     l = Seq.fill(10000)(Random.nextInt(10000000)).distinct.toList
-    plainMedian = forList(l)(plain())
-    singleHeapMedian = forList(l)(singleHeap())
-    dualHeapMedian = forList(l)(dualHeap())
+    plainMedian = plain() ++ l
+    singleHeapMedian = singleHeap() ++ l
+    dualHeapMedian = dualHeap() ++ l
   }
 
   @Benchmark
@@ -52,13 +50,13 @@ class MedianBench {
   def addHeapDual(): Median = l.foldLeft(dualHeap())((m, i) => m + i)
 
   @Benchmark
-  def addListPlain(): Median = forList(l)(plain())
+  def addListPlain(): Median = plain() ++ l
 
   @Benchmark
-  def addListHeap(): Median = forList(l)(singleHeap())
+  def addListHeap(): Median = singleHeap() ++ l
 
   @Benchmark
-  def addListHeapDual(): Median = forList(l)(dualHeap())
+  def addListHeapDual(): Median = dualHeap() ++ l
 
   @Benchmark
   def medianSumPlain(): Int = medianSum(l)(plain())

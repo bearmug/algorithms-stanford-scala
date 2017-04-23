@@ -47,15 +47,15 @@ class MedianSuite extends FunSuite {
   }
 
   test("calc works for empty list") {
-    assert(forList(List.empty)(dualHeap()).calc == Int.MaxValue)
-    assert(forList(List.empty)(singleHeap()).calc == Int.MaxValue)
+    assert((dualHeap() ++ List.empty).calc == Int.MaxValue)
+    assert((dualHeap() ++ List.empty).calc == Int.MaxValue)
   }
 
   test("calc works for non-empty list") {
-    assert(forList(List(3, 2, 5, 4, 1))(dualHeap()).calc == 3)
-    assert(forList(List(3, 2, 5, 4, 1))(singleHeap()).calc == 3)
-    assert(forList(List(3, 2, 5, 6, 4, 1))(dualHeap()).calc == 3)
-    assert(forList(List(3, 2, 5, 6, 4, 1))(singleHeap()).calc == 3)
+    assert((dualHeap() ++ List(3, 2, 5, 4, 1)).calc == 3)
+    assert((singleHeap() ++ List(3, 2, 5, 4, 1)).calc == 3)
+    assert((dualHeap() ++ List(3, 2, 5, 6, 4, 1)).calc == 3)
+    assert((singleHeap() ++ List(3, 2, 5, 6, 4, 1)).calc == 3)
   }
 
   test("calc works for N elements") {
